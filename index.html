@@ -191,6 +191,44 @@ iframe{
   height:72vh; /* fallback */
   -webkit-overflow-scrolling: touch;
 }
+/* Landscape enforcement overlay */
+#rotateNotice {
+  position: fixed;
+  inset: 0;
+  background: #ffffff;
+  z-index: 99999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 24px;
+}
+
+#rotateNotice .box {
+  max-width: 420px;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+}
+
+#rotateNotice h2 {
+  margin: 0 0 8px;
+  font-size: 16px;
+  color: #0b2d5c;
+}
+
+#rotateNotice p {
+  margin: 0;
+  font-size: 12px;
+  color: #475569;
+}
+
+@media (orientation: portrait) {
+  #rotateNotice {
+    display: flex;
+  }
+}
 
 </style>
 </head>
@@ -3803,5 +3841,6 @@ refreshSearchIndex();
 </script>
 </body>
 </html>
+
 
 

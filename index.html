@@ -1,0 +1,3741 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Municipal Debtor Intelligence — Overview</title>
+
+  <!-- Open Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --blue:#0097d8;
+      --teal:#3ecfff;
+      --ink:#0f172a;
+      --muted:#5d6773;
+      --line:#e7edf3;
+      --shadow: 0 10px 28px rgba(16,24,40,0.08);
+      --radius: 16px;
+      --base: 10.5px;
+      --heading:#0b2d5c;
+      --flow:#7fd8ff;
+    }
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family:"Open Sans", Arial, sans-serif;
+      font-size:var(--base);
+      color:var(--ink);
+      background:#fff;
+    }
+    .wrap{ max-width: 1100px; margin: 0 auto; padding: 0 18px; }
+
+    /* Header */
+    .header{ border-bottom:1px solid #e5e7eb; background:#fff; position:sticky; top:0; z-index:2000; }
+    .header-row{ display:flex; align-items:center; gap:14px; padding:14px 0; }
+    .logo img{ height:44px; display:block; }
+    .brand{ font-weight:700; letter-spacing:.4px; display:flex; flex-wrap:wrap; gap:6px; align-items:baseline; }
+    .brand .lk{ color:#6b7280; }
+    .brand .solutions{ color:#0b2d5c; }
+    .brand .product{ color:#111827; }
+
+    .nav{ background:var(--blue); position:relative; z-index:1000; }
+    .nav .wrap{ display:flex; gap:6px; flex-wrap:wrap; overflow-x:auto; }
+    .nav a{
+      color:#fff; text-decoration:none;
+      padding:10px 14px; font-size:11px;
+      border-bottom:3px solid transparent; white-space:nowrap; display:inline-block;
+    }
+    .nav a.active{ border-bottom-color:#fff; font-weight:700; }
+
+    /* Hero */
+    .hero{
+      margin: 16px 0 12px;
+      border-radius: var(--radius);
+      padding: 16px 16px 14px;
+      background:
+        radial-gradient(900px 260px at 15% 0%, rgba(0,151,216,0.22), transparent 62%),
+        radial-gradient(700px 240px at 85% 10%, rgba(62,207,255,0.18), transparent 60%),
+        linear-gradient(180deg,#fff,#fbfdff);
+      border:1px solid var(--line);
+      box-shadow: var(--shadow);
+    }
+    .hero h1{ margin:0 0 8px 0; font-size:16px; line-height:1.25; }
+    .hero p{ margin:0; font-size:11.2px; color:var(--muted); }
+
+    /* Tiles */
+    .tiles{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:10px;
+      margin: 12px 0 14px;
+    }
+    .tile{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius: 16px;
+      padding:12px;
+      box-shadow: 0 10px 22px rgba(16,24,40,0.05);
+    }
+    .tileTop{ height:3px; width:28px; background:var(--blue); border-radius:99px; margin-bottom:8px; }
+    .tileTitle{ font-weight:700; font-size:11.5px; margin-bottom:3px; }
+    .tileDesc{ color:var(--muted); font-size:10.4px; }
+
+    /* Diagram card */
+    .diagram-card{
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      background:#fff;
+      box-shadow: var(--shadow);
+      padding: 12px;
+      margin-bottom: 18px;
+    }
+
+    /* Title row + progress pill */
+    .diagram-title{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      margin: 2px 4px 10px;
+      flex-wrap: wrap;
+    }
+    .diagram-title .h{ font-weight:700; font-size:11.5px; }
+    .diagram-title .s{ color:var(--muted); font-size:10.2px; }
+
+    .progressPill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:7px 10px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background: #fbfdff;
+      box-shadow: 0 10px 22px rgba(16,24,40,0.05);
+      font-size:10.5px;
+      color: var(--heading);
+      user-select: none;
+      white-space: nowrap;
+    }
+    .dot{
+      width:8px; height:8px;
+      border-radius: 999px;
+      background: var(--blue);
+      box-shadow: 0 0 0 4px rgba(0,151,216,0.12);
+      flex: 0 0 auto;
+    }
+    .pillMuted{ color: var(--muted); font-weight: 600; }
+
+    svg{ width:100%; height:auto; display:block; }
+    svg{ pointer-events:none; }
+
+    /* Base animated flow line */
+    .flowLine{
+      stroke-dasharray: 7 10;
+      animation: dash 2.8s linear infinite;
+      opacity: 0.8;
+    }
+    @keyframes dash{ to { stroke-dashoffset: -34; } }
+
+    /* Hub pulse */
+    .pulse{
+      transform-origin: 550px 300px;
+      animation: pulse 2.8s ease-in-out infinite;
+    }
+    @keyframes pulse{
+      0%{ transform: scale(1); opacity:.95; }
+      50%{ transform: scale(1.02); opacity:.78; }
+      100%{ transform: scale(1); opacity:.95; }
+    }
+
+    /* ===== Sequence highlight loop ===== */
+    .stepBox, .hubCore, .stepCircle{
+      transition: filter .25s ease, transform .25s ease, opacity .25s ease;
+    }
+    .activeStep{
+      filter: drop-shadow(0 14px 26px rgba(0,151,216,0.18));
+      transform: translateY(-1px);
+    }
+    .activeHub{
+      filter: drop-shadow(0 18px 34px rgba(0,151,216,0.22));
+    }
+
+    .seqLine{
+      opacity: 0.25;
+      transition: opacity .25s ease, stroke-width .25s ease;
+    }
+    .seqLine.activeLine{
+      opacity: 1;
+      stroke-width: 3.5;
+    }
+
+    @media (max-width: 980px){
+      .tiles{ grid-template-columns:repeat(2,1fr); }
+    }
+    @media (max-width: 520px){
+      .tiles{ grid-template-columns:1fr; }
+      .progressPill{ width:100%; justify-content:center; }
+    }
+  
+</style>
+</head>
+
+<body>
+  <div class="header">
+    <div class="wrap header-row">
+      <div class="logo">
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAasAAABhCAYAAABoFY4LAAAACXBIWXMAAAsTAAALEwEAmpwYAAAE9WlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNi4wLWMwMDIgNzkuMTY0MzUyLCAyMDIwLzAxLzMwLTE1OjUwOjM4ICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIgeG1sbnM6cGhvdG9zaG9wPSJodHRwOi8vbnMuYWRvYmUuY29tL3Bob3Rvc2hvcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RFdnQ9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZUV2ZW50IyIgeG1wOkNyZWF0ZURhdGU9IjIwMjItMDEtMjNUMTE6MDg6MzMrMDI6MDAiIHhtcDpNb2RpZnlEYXRlPSIyMDIyLTAxLTIzVDExOjI3OjE1KzAyOjAwIiB4bXA6TWV0YWRhdGFEYXRlPSIyMDIyLTAxLTIzVDExOjI3OjE1KzAyOjAwIiBkYzpmb3JtYXQ9ImltYWdlL3BuZyIgcGhvdG9zaG9wOkNvbG9yTW9kZT0iMyIgcGhvdG9zaG9wOklDQ1Byb2ZpbGU9InNSR0IgSUVDNjE5NjYtMi4xIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOmJkMzllYWE2LWM1NWUtMjM0OC1hYjkzLTVkYTVmNmRmNzFkYyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDpi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" alt="LK Centrix Solutions" style="height:44px; display:block;">
+      </div>
+      <div class="brand">
+        <span class="lk">LKCENTRIX</span>
+        <span class="solutions">SOLUTIONS</span>
+        <span class="product">MUNICIPAL DEBTOR INTELLIGENCE</span>
+      </div>
+    </div>
+
+    <div class="nav">
+      <div class="wrap">
+        <a class="active" href="#" data-page="overview" onclick="return showPage('overview')">Overview</a>
+        <a href="#" data-page="insights" onclick="return showPage('insights')">Debtor Insights</a>
+        <a href="#" data-page="geo" onclick="return showGeo()">Geo Insights</a>
+        <a href="#" data-page="strategy" onclick="return showPage('strategy')">Debt Strategy</a>
+        <a href="#" data-page="individual" onclick="return showPage('individual')">Individual Report</a>
+        <a href="#" data-page="contact" onclick="return showPage('contact')">Contact Us</a>
+      </div>
+    </div>
+  </div>
+
+<main id="pageOverview">
+
+
+  <div class="wrap">
+    <div class="hero">
+      <h1>A 360° view of debtors who own property in your municipality</h1>
+      <p>
+        Municipal Debtor Intelligence helps you move from <b>“who is this debtor?”</b> to <b>“what should we do next?”</b>
+        by combining owner identity, property links, <b style="color:#0a7fb0;">contactability</b>, risk signals and actionable collection guidance.
+      </p>
+    </div>
+
+    <!-- ===== GEO INSIGHTS (loads below the menu, overview stays visible) ===== -->
+    <div id="geoPanel" class="card" style="display:none; margin-top:14px;">
+      <div class="sectionHeader" style="border-bottom:1px solid var(--line);">
+        <div>
+          <h2 style="margin:0;">Geo Insights</h2>
+          <div class="note">Interactive property map</div>
+        </div>
+        </div>
+      <div class="sectionBody" style="padding:0;">
+        <iframe id="geoFrame" style="width:100%; height:75vh; border:none; border-bottom-left-radius:16px; border-bottom-right-radius:16px;"></iframe>
+      </div>
+    </div>
+
+
+    <div class="tiles">
+      <div class="tile"><div class="tileTop"></div><div class="tileTitle">Identity Resolution</div><div class="tileDesc">Resolve people, businesses and trusts from partial inputs.</div></div>
+      <div class="tile"><div class="tileTop"></div><div class="tileTitle">Ownership & Property</div><div class="tileDesc">Link debtors to properties and related municipal accounts.</div></div>
+      <div class="tile"><div class="tileTop"></div><div class="tileTitle">Contactability</div><div class="tileDesc">Improve reachability to accelerate collections.</div></div>
+      <div class="tile"><div class="tileTop"></div><div class="tileTitle">Insights → Strategy</div><div class="tileDesc">Turn debtor data into prioritised recovery actions.</div></div>
+    </div>
+
+    <div class="diagram-card">
+      <div class="diagram-title">
+        <div class="h">Process flow (Step 1 → 17)</div>
+        <div class="s">Municipal Debtor Intelligence brought to you by LK Centrix</div>
+
+        <!-- Progress indicator pill -->
+        <div class="progressPill" id="progressPill" aria-live="polite">
+          <span class="dot" aria-hidden="true"></span>
+          <span id="pillStep">Step 1 of 17</span>
+          <span class="pillMuted">•</span>
+          <span id="pillLabel">Capture your debtor information</span>
+        </div>
+      </div>
+
+      <svg viewBox="0 0 1100 700" role="img" aria-label="Municipal Debtor Intelligence sequential process diagram">
+        <defs>
+          <linearGradient id="hubGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#0097d8"/>
+            <stop offset="1" stop-color="#3ecfff"/>
+          </linearGradient>
+          <linearGradient id="cardGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#ffffff"/>
+            <stop offset="1" stop-color="#fbfdff"/>
+          </linearGradient>
+          <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#7fd8ff"/>
+          </marker>
+          <filter id="softShadow" x="-50%" y="-50%" width="200%" height="200%">
+            <feDropShadow dx="0" dy="10" stdDeviation="10" flood-color="rgba(16,24,40,0.12)"/>
+          </filter>
+        </defs>
+
+        <!-- ===== ROW 1: 1,2,3 ===== -->
+        <g filter="url(#softShadow)">
+          <rect id="step-1" class="stepBox" x="60"  y="40" width="280" height="86" rx="16" fill="url(#cardGrad)" stroke="#e7edf3"/>
+          <text x="78"  y="68"  font-size="12" font-weight="700" fill="var(--heading)">1. Capture your debtor information</text>
+          <text x="78"  y="94"  font-size="10.5" fill="var(--muted)">Client captures debtor details</text>
+          <text x="78"  y="113" font-size="10.5" fill="var(--muted)">Name/ID/Account/Arrears</text>
+
+          <rect id="step-2" class="stepBox" x="410" y="40" width="300" height="86" rx="16" fill="url(#cardGrad)" stroke="#e7edf3"/>
+          <text x="428" y="68"  font-size="12" font-weight="700" fill="var(--heading)">2. LK Centrix Data Validation Engine</text>
+          <text x="428" y="94"  font-size="10.5" fill="var(--muted)">Standardise, validate, resolve</text>
+          <text x="428" y="113" font-size="10.5" fill="var(--muted)">Match confidence & checks</text>
+
+          <rect id="step-3" class="stepBox" x="780" y="40" width="280" height="86" rx="16" fill="url(#cardGrad)" stroke="#e7edf3"/>
+          <text x="798" y="68"  font-size="12" font-weight="700" fill="var(--heading)">3. LK Centrix Data Validation Outcomes</text>
+          <text x="798" y="94"  font-size="10.5" fill="var(--muted)">Verified / Flagged / Review</text>
+          <text x="798" y="113" font-size="10.5" fill="var(--muted)">Quality status + notes</text>
+        </g>
+
+        <path id="line-1-2" class="flowLine seqLine" d="M340,83 C370,83 385,83 410,83" fill="none" stroke="var(--flow)" stroke-width="3" marker-end="url(#arrow)"/>
+        <path id="line-2-3" class="flowLine seqLine" d="M710,83 C740,83 755,83 780,83" fill="none" stroke="var(--flow)" stroke-width="3" marker-end="url(#arrow)"/>
+
+        <path id="line-3-hub" class="flowLine seqLine" d="M920,126 C820,170 710,220 640,260" fill="none" stroke="var(--flow)" stroke-width="3" marker-end="url(#arrow)"/>
+
+        <!-- Source->hub lines -->
+        <path class="flowLine" d="M550,200 C550,235 550,255 550,270" fill="none" stroke="var(--flow)" stroke-width="3" marker-end="url(#arrow)"/>
+        <path class="flowLine" d="M420,245 C465,270 490,285 505,292" fill="none" stroke="var(--flow)" stroke-width="3" marker-end="url(#arrow)"/>
+        <path class="flowLine" d="M420,355 C465,330 490,315 505,308" fill="none" stroke="var(--flow)" stroke-width="3" marker-end="url(#arrow)"/>
+        <path class="flowLine" d="M550,410 C550,375 550,355 550,340" fill="none" stroke="var(--flow)" stroke-width="3" marker-end="url(#arrow)"/>
+        <path class="flowLine" d="M680,355 C635,330 610,315 595,308" fill="none" stroke="var(--flow)" stroke-width="3" marker-end="url(#arrow)"/>
+        <path class="flowLine" d="M680,245 C635,270 610,285 595,292" fill="none" stroke="var(--flow)" stroke-width="3" marker-end="url(#arrow)"/>
+
+        <circle id="hub" class="hubCore pulse" cx="550" cy="300" r="92" fill="url(#hubGrad)"/>
+        <text x="550" y="286" text-anchor="middle" font-size="12" font-weight="700" fill="#ffffff">MUNICIPAL DEBTOR</text>
+        <text x="550" y="307" text-anchor="middle" font-size="12" font-weight="700" fill="#ffffff">INFORMATION</text>
+        <text x="550" y="328" text-anchor="middle" font-size="12" font-weight="700" fill="#ffffff">SOURCING</text>
+
+        <g filter="url(#softShadow)">
+          <circle id="src-4" class="stepCircle" cx="550" cy="190" r="52" fill="url(#cardGrad)" stroke="#e7edf3"/>
+          <text x="550" y="186" text-anchor="middle" font-size="11" font-weight="700" fill="var(--heading)">4. Home Affairs</text>
+          <text x="550" y="204" text-anchor="middle" font-size="9.5" fill="var(--muted)">Sourcing</text>
+
+          <circle id="src-9" class="stepCircle" cx="410" cy="245" r="52" fill="url(#cardGrad)" stroke="#e7edf3"/>
+          <text x="410" y="241" text-anchor="middle" font-size="11" font-weight="700" fill="var(--heading)">9. LK Centrix Data</text>
+          <text x="410" y="259" text-anchor="middle" font-size="9.5" fill="var(--muted)">Sourcing</text>
+
+          <circle id="src-8" class="stepCircle" cx="410" cy="355" r="52" fill="url(#cardGrad)" stroke="#e7edf3"/>
+          <text x="410" y="351" text-anchor="middle" font-size="11" font-weight="700" fill="var(--heading)">8. Credit Bureau</text>
+          <text x="410" y="369" text-anchor="middle" font-size="9.5" fill="var(--muted)">Sourcing</text>
+
+          <circle id="src-7" class="stepCircle" cx="550" cy="420" r="52" fill="url(#cardGrad)" stroke="#e7edf3"/>
+          <text x="550" y="416" text-anchor="middle" font-size="11" font-weight="700" fill="var(--heading)">7. CIPC</text>
+          <text x="550" y="434" text-anchor="middle" font-size="9.5" fill="var(--muted)">Sourcing</text>
+
+          <circle id="src-6" class="stepCircle" cx="690" cy="355" r="52" fill="url(#cardGrad)" stroke="#e7edf3"/>
+          <text x="690" y="351" text-anchor="middle" font-size="11" font-weight="700" fill="var(--heading)">6. Trust</text>
+          <text x="690" y="369" text-anchor="middle" font-size="9.5" fill="var(--muted)">Sourcing</text>
+
+          <circle id="src-5" class="stepCircle" cx="690" cy="245" r="52" fill="url(#cardGrad)" stroke="#e7edf3"/>
+          <text x="690" y="241" text-anchor="middle" font-size="11" font-weight="700" fill="var(--heading)">5. Deeds</text>
+          <text x="690" y="259" text-anchor="middle" font-size="9.5" fill="var(--muted)">Sourcing</text>
+        </g>
+
+        <path id="line-hub-10" class="flowLine seqLine" d="M550,392 C550,430 520,448 500,460" fill="none" stroke="var(--flow)" stroke-width="3" marker-end="url(#arrow)"/>
+
+        <g filter="url(#softShadow)">
+          <rect id="step-10" class="stepBox" x="60"  y="470" width="250" height="78" rx="16" fill="url(#cardGrad)" stroke="#e7edf3"/>
+          <text x="78"  y="498" font-size="12" font-weight="700" fill="var(--heading)">10. Municipal Debtor Report</text>
+          <text x="78"  y="524" font-size="10.5" fill="var(--muted)">360° debtor profile view</text>
+
+          <rect id="step-11" class="stepBox" x="330" y="470" width="250" height="78" rx="16" fill="url(#cardGrad)" stroke="#e7edf3"/>
+          <text x="348" y="498" font-size="12" font-weight="700" fill="var(--heading)">11. Analytical Engine</text>
+          <text x="348" y="524" font-size="10.5" fill="var(--muted)">Patterns & prioritisation</text>
+
+          <rect id="step-12" class="stepBox" x="600" y="470" width="250" height="78" rx="16" fill="url(#cardGrad)" stroke="#e7edf3"/>
+          <text x="618" y="498" font-size="12" font-weight="700" fill="var(--heading)">12. Ghost Debtor Map View</text>
+          <text x="618" y="524" font-size="10.5" fill="var(--muted)">Map-based visibility</text>
+
+          <rect id="step-13" class="stepBox" x="870" y="470" width="190" height="78" rx="16" fill="url(#cardGrad)" stroke="#e7edf3"/>
+          <text x="888" y="498" font-size="12" font-weight="700" fill="var(--heading)">13. Debtor Insights</text>
+          <text x="888" y="524" font-size="10.5" fill="var(--muted)">Actionable insights</text>
+        </g>
+
+        <path id="line-10-11" class="flowLine seqLine" d="M310,509 C320,509 325,509 330,509" fill="none" stroke="var(--flow)" stroke-width="3" marker-end="url(#arrow)"/>
+        <path id="line-11-12" class="flowLine seqLine" d="M580,509 C590,509 595,509 600,509" fill="none" stroke="var(--flow)" stroke-width="3" marker-end="url(#arrow)"/>
+        <path id="line-12-13" class="flowLine seqLine" d="M850,509 C860,509 865,509 870,509" fill="none" stroke="var(--flow)" stroke-width="3" marker-end="url(#arrow)"/>
+
+        <path id="line-13-14" class="flowLine seqLine" d="M965,548 C965,572 900,590 850,590" fill="none" stroke="var(--flow)" stroke-width="3" marker-end="url(#arrow)"/>
+
+        <g filter="url(#softShadow)">
+          <rect id="step-14" class="stepBox" x="60"  y="590" width="250" height="78" rx="16" fill="url(#cardGrad)" stroke="#e7edf3"/>
+          <text x="78"  y="618" font-size="12" font-weight="700" fill="var(--heading)">14. Credit Modelling</text>
+          <text x="78"  y="644" font-size="10.5" fill="var(--muted)">Predictive decisioning</text>
+
+          <rect id="step-15" class="stepBox" x="330" y="590" width="250" height="78" rx="16" fill="url(#cardGrad)" stroke="#e7edf3"/>
+          <text x="348" y="618" font-size="12" font-weight="700" fill="var(--heading)">15. Debt Strategies</text>
+          <text x="348" y="644" font-size="10.5" fill="var(--muted)">Recommended next actions</text>
+
+          <rect id="step-16" class="stepBox" x="600" y="590" width="250" height="78" rx="16" fill="url(#cardGrad)" stroke="#e7edf3"/>
+          <text x="618" y="618" font-size="12" font-weight="700" fill="var(--heading)">16. Indigent Analytics & Scoring</text>
+          <text x="618" y="644" font-size="10.5" fill="var(--muted)">Eligibility analytics</text>
+
+          <rect id="step-17" class="stepBox" x="870" y="590" width="190" height="78" rx="16" fill="url(#cardGrad)" stroke="#e7edf3"/>
+          <text x="888" y="618" font-size="12" font-weight="700" fill="var(--heading)">17. Indigent Probability Score</text>
+          <text x="888" y="644" font-size="10.5" fill="var(--muted)">Probability score</text>
+        </g>
+
+        <path id="line-14-15" class="flowLine seqLine" d="M310,629 C320,629 325,629 330,629" fill="none" stroke="var(--flow)" stroke-width="3" marker-end="url(#arrow)"/>
+        <path id="line-15-16" class="flowLine seqLine" d="M580,629 C590,629 595,629 600,629" fill="none" stroke="var(--flow)" stroke-width="3" marker-end="url(#arrow)"/>
+        <path id="line-16-17" class="flowLine seqLine" d="M850,629 C860,629 865,629 870,629" fill="none" stroke="var(--flow)" stroke-width="3" marker-end="url(#arrow)"/>
+      </svg>
+    </div>
+  </div>
+
+
+</main>
+
+<main id="pageInsights" style="display:none;">
+  <div class="wrap" style="padding-top:16px;">
+    <iframe id="insightsFrame" style="width:100%;height:calc(100vh - 150px);border:none;border-radius:16px;box-shadow: var(--shadow);"></iframe>
+  </div>
+</main>
+
+
+<main id="pageStrategy" style="display:none;">
+  <div class="wrap" style="padding-top:16px;">
+    <iframe id="strategyFrame" style="width:100%;height:calc(100vh - 150px);border:none;border-radius:16px;box-shadow: var(--shadow);"></iframe>
+  </div>
+</main>
+
+
+<main id="pageIndividual" style="display:none;">
+  <div class="wrap" style="padding-top:16px;">
+    <iframe id="individualFrame"
+            style="width:100%;height:calc(100vh - 150px);min-height:700px;border:none;border-radius:16px;box-shadow: var(--shadow);background:#fff;"></iframe>
+  </div>
+</main>
+
+<main id="pageContact" style="display:none;">
+  <div class="wrap" style="padding-top:16px;">
+    <div class="hero">
+      <h1>Contact Us</h1>
+      <p>info@lkcentrix.co.za</p>
+	<p>011-568 8322</p>
+    </div>
+  </div>
+</main>
+
+
+<script>
+  // ===== In-page navigation (keeps header/nav visible) =====
+  function setActiveNav(page){
+    document.querySelectorAll('.nav a[data-page]').forEach(a => {
+      a.classList.toggle('active', a.getAttribute('data-page') === page);
+    });
+  }
+
+    function showPage(page){
+    const overview    = document.getElementById('pageOverview');
+    const insights    = document.getElementById('pageInsights');
+    const strategy    = document.getElementById('pageStrategy');
+    const individual  = document.getElementById('pageIndividual');
+    const contact     = document.getElementById('pageContact');
+    const geoPanel    = document.getElementById('geoPanel');
+    const processCard = document.querySelector('.diagram-card');
+    if (!overview || !insights || !strategy) return false;
+
+    // Helper: hide all page containers we know about
+    const hideAll = () => {
+      overview.style.display = 'none';
+      insights.style.display = 'none';
+      strategy.style.display = 'none';
+      if (individual) individual.style.display = 'none';
+      if (contact) contact.style.display = 'none';
+    };
+
+    if (page === 'insights'){
+      if (geoPanel) geoPanel.style.display = 'none';
+      if (processCard) processCard.style.display = '';
+      hideAll();
+      insights.style.display = 'block';
+      setActiveNav('insights');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return false;
+    }
+
+    if (page === 'strategy'){
+      if (geoPanel) geoPanel.style.display = 'none';
+      if (processCard) processCard.style.display = '';
+      hideAll();
+      strategy.style.display = 'block';
+      setActiveNav('strategy');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return false;
+    }
+
+    if (page === 'individual'){
+      if (geoPanel) geoPanel.style.display = 'none';
+      if (processCard) processCard.style.display = '';
+      hideAll();
+      if (individual) individual.style.display = 'block';
+      setActiveNav('individual');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return false;
+    }
+
+    if (page === 'contact'){
+      if (geoPanel) geoPanel.style.display = 'none';
+      if (processCard) processCard.style.display = '';
+      hideAll();
+      if (contact) contact.style.display = 'block';
+      setActiveNav('contact');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return false;
+    }
+
+    // default: overview
+    if (geoPanel) geoPanel.style.display = 'none';
+    if (processCard) processCard.style.display = '';
+    hideAll();
+    overview.style.display = 'block';
+    setActiveNav('overview');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    return false;
+  }
+
+  function showGeo(){
+    // Ensure overview is visible, insights hidden
+    showPage('overview');
+
+    const panel = document.getElementById('geoPanel');
+    if (panel){
+      panel.style.display = 'block';
+      const processCard = document.querySelector('.diagram-card');
+      if (processCard) processCard.style.display = 'none';
+      setActiveNav('geo');
+      // Scroll to panel for a smooth demo experience
+      const y = panel.getBoundingClientRect().top + window.scrollY - 90;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+  }
+    return false;
+  }
+
+  function hideGeo(){
+        const panel = document.getElementById('geoPanel');
+    if (panel) panel.style.display = 'none';
+    const processCard = document.querySelector('.diagram-card');
+    if (processCard) processCard.style.display = '';
+    setActiveNav('overview');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    return false;
+  }
+</script>
+
+<script>
+  // ===== Progress + Sequential highlight loop =====
+  // Shows REAL step numbers (1–17), not "12 items" in the loop.
+
+  const sequence = [
+    { key:'step-1',  stepNo: 1,  label:'Capture your debtor information', lines:['line-1-2'] },
+    { key:'step-2',  stepNo: 2,  label:'LK Centrix Data Validation Engine', lines:['line-1-2','line-2-3'] },
+    { key:'step-3',  stepNo: 3,  label:'LK Centrix Data Validation Outcomes', lines:['line-2-3','line-3-hub'] },
+
+    // Hub is the sourcing stage (steps 4–9). We’ll display it as "4–9".
+    { key:'hub',     stepNo: '4–9', label:'Information Sourcing (Hub)', isHub:true, lines:['line-3-hub','line-hub-10'] },
+
+    { key:'step-10', stepNo: 10, label:'Municipal Debtor Report', lines:['line-hub-10','line-10-11'] },
+    { key:'step-11', stepNo: 11, label:'Analytical Engine', lines:['line-10-11','line-11-12'] },
+    { key:'step-12', stepNo: 12, label:'Ghost Debtor Map View', lines:['line-11-12','line-12-13'] },
+    { key:'step-13', stepNo: 13, label:'Debtor Insights', lines:['line-12-13','line-13-14'] },
+    { key:'step-14', stepNo: 14, label:'Credit Modelling', lines:['line-13-14','line-14-15'] },
+    { key:'step-15', stepNo: 15, label:'Debt Strategies', lines:['line-14-15','line-15-16'] },
+    { key:'step-16', stepNo: 16, label:'Indigent Analytics & Scoring', lines:['line-15-16','line-16-17'] },
+    { key:'step-17', stepNo: 17, label:'Indigent Probability Score', lines:['line-16-17'] }
+  ];
+
+  const pillStep  = document.getElementById('pillStep');
+  const pillLabel = document.getElementById('pillLabel');
+
+  const allBoxes = Array.from(document.querySelectorAll('.stepBox'));
+  const hub = document.getElementById('hub');
+  const lines = Array.from(document.querySelectorAll('.seqLine'));
+
+  function clearAll(){
+    allBoxes.forEach(b => b.classList.remove('activeStep'));
+    hub.classList.remove('activeHub');
+    lines.forEach(l => l.classList.remove('activeLine'));
+  }
+
+  function setProgress(idx){
+    const item = sequence[idx];
+    pillStep.textContent = `Step ${item.stepNo} of 17`;
+    pillLabel.textContent = item.label;
+  }
+
+  let idx = 0;
+  const intervalMs = 1500;
+
+  setProgress(0);
+
+  setInterval(() => {
+    clearAll();
+
+    const item = sequence[idx];
+    const el = document.getElementById(item.key);
+
+    if (item.isHub){
+      hub.classList.add('activeHub');
+    } else if (el){
+      el.classList.add('activeStep');
+    }
+
+    (item.lines || []).forEach(id => {
+      const ln = document.getElementById(id);
+      if (ln) ln.classList.add('activeLine');
+    });
+
+    setProgress(idx);
+
+    idx = (idx + 1) % sequence.length;
+  }, intervalMs);
+</script>
+ 
+
+<!-- ===========================
+  EMBEDDED PAGES (SINGLE FILE)
+=========================== -->
+
+<template id="tpl-map3">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Interactive Property Map (DEMO - Upington)</title>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<style>
+  #map { width:100%; height:90vh; background:#ddd; }
+
+  /* Legend (explicitly positioned; NOT a Leaflet control) */
+  .legend {
+    position:absolute;
+    top:10px;
+    right:10px;
+    z-index:1200;
+    background:#fff;
+    padding:8px 10px;
+    border-radius:6px;
+    box-shadow:0 1px 5px rgba(0,0,0,.4);
+    font:14px Arial, sans-serif;
+    width: 270px;
+    max-height:70vh;
+    overflow-y:auto;
+  }
+  .legend .title { font-weight:bold; margin-bottom:6px; }
+  .legend .item {
+    display:flex; align-items:center;
+    margin:4px 0;
+    cursor:pointer; user-select:none;
+    padding:4px 6px;
+    border-radius:6px;
+  }
+  .legend .item:hover { background:#f6f6f6; }
+  .legend .item.active { background:#f0f0f0; }
+  .legend .swatch { width:12px; height:12px; border-radius:50%; margin-right:8px; display:inline-block; }
+  .legend .hint { margin-top:8px; font-size:12px; color:#666; }
+  .legend .divider { height:1px; background:#eee; margin:6px 0; }
+
+  /* Search */
+  .search-box {
+    position:absolute;
+    top:10px;
+    left:50px;
+    z-index:1200;
+    background:#fff;
+    padding:5px 8px;
+    border-radius:6px;
+    box-shadow:0 1px 5px rgba(0,0,0,.4);
+    font:14px Arial, sans-serif;
+  }
+  .search-box input {
+    width:250px;
+    padding:4px;
+    border:1px solid #ccc;
+    border-radius:4px;
+  }
+  .search-results {
+    max-height:150px;
+    overflow-y:auto;
+    background:#fff;
+    border:1px solid #ccc;
+    margin-top:4px;
+    border-radius:4px;
+    display:none;
+  }
+  .search-results div {
+    padding:4px 6px;
+    cursor:pointer;
+  }
+  .search-results div:hover { background:#eee; }
+
+  /* Popup */
+  .popup-table { width:100%; font-size:12px; border-collapse:collapse; }
+  .popup-table td { padding:3px 4px; vertical-align:top; }
+  .popup-table td.key { font-weight:bold; }
+  .leaflet-popup-content-wrapper { width:550px; max-width:550px; }
+</style>
+</head>
+
+<body>
+<div id="map"></div>
+
+<div class="search-box">
+  <strong>Search:</strong><br/>
+  <input type="text" id="searchInput" placeholder="Property ID, Area, Category"/>
+  <div id="searchResults" class="search-results"></div>
+</div>
+
+<div id="legend" class="legend"></div>
+
+<script>
+/* =========================
+   1) Categories + colors
+   - Swap colours between INDUSTRIAL and GHOST DEBTORS
+   - Ghost Debtors gets RED, Industrial gets PURPLE
+   ========================= */
+var categoryColors = {
+  "AGRICULTURE":"#1f77b4",
+  "BUSINESS AND COMMERCIAL":"#ff7f0e",
+  "COMMUNAL PROPERTY":"#2ca02c",
+
+  "INDUSTRIAL":"#9467bd",        // swapped: was red
+  "GHOST DEBTORS":"#d62728",     // swapped: now red
+
+  "MUNICIPAL":"#8c564b",
+  "PLACE OF WORSHIP":"#e377c2",
+  "PROTECTED AREA":"#7f7f7f",
+  "PSI":"#bcbd22",
+  "PUBLIC BENEFIT ORGANISATION":"#17becf",
+  "PUBLIC SERVICE PROPERTY":"#393b79",
+  "RESIDENTIAL":"#637939",
+  "VACANT LAND":"#8c6d31"
+};
+var categories = Object.keys(categoryColors);
+
+/* =========================
+   2) Map: Upington, South Africa
+   ========================= */
+var map = L.map('map').setView([-28.458607067001207, 21.27030372619629], 13);
+
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  attribution:"© OpenStreetMap contributors"
+}).addTo(map);
+
+var canvasRenderer = L.canvas({ padding:0.5 });
+
+/* =========================
+   3) Demo generation: 100 points per category
+   - Ghost Debtors markers are 2 notches bigger
+   ========================= */
+var POINTS_PER_CATEGORY = 100;
+
+var BBOX = {
+  minLat:-28.60, maxLat:-28.25,
+  minLon:21.05,  maxLon:21.55
+};
+
+function mulberry32(a){
+  return function(){
+    var t=a+=0x6D2B79F5;
+    t=Math.imul(t^t>>>15,t|1);
+    t^=t+Math.imul(t^t>>>7,t|61);
+    return((t^t>>>14)>>>0)/4294967296;
+  }
+}
+function esc(s){
+  return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+
+var layersByCategory = {};
+var markerIndex = []; // {marker, record} for search
+categories.forEach(c => layersByCategory[c] = L.layerGroup().addTo(map));
+
+function popupHtml(r){
+  return `<table class="popup-table">
+    <tr><td class="key">PROPERTY ID</td><td>${esc(r.id)}</td></tr>
+    <tr><td class="key">CATEGORY</td><td>${esc(r.category)}</td></tr>
+    <tr><td class="key">AREA</td><td>${esc(r.area)}</td></tr>
+    <tr><td class="key">NOTE</td><td>Demo data – no personal information</td></tr>
+  </table>`;
+}
+
+var areas = ["Upington Central","Keidebees","Blydeville","Industrial Zone","Rural Fringe"];
+
+function makeId(cat, n){
+  var prefix = cat.replace(/\s+/g,'').slice(0,4).toUpperCase();
+  return prefix + "-" + String(n).padStart(4,"0");
+}
+
+function markerRadiusFor(category){
+  // others 7, Ghost Debtors 9 (2 notches bigger)
+  return (category === "GHOST DEBTORS") ? 9 : 7;
+}
+
+categories.forEach((cat, idx) => {
+  var rnd = mulberry32(20251227 + idx * 9999);
+  for(let n=1; n<=POINTS_PER_CATEGORY; n++){
+    let lat = BBOX.minLat + (BBOX.maxLat - BBOX.minLat) * rnd();
+    let lon = BBOX.minLon + (BBOX.maxLon - BBOX.minLon) * rnd();
+
+    let rec = {
+      lat, lon,
+      category: cat,
+      id: makeId(cat, n),
+      area: areas[Math.floor(rnd() * areas.length)]
+    };
+
+    let m = L.circleMarker([lat, lon], {
+      radius: markerRadiusFor(cat),
+      color: categoryColors[cat],
+      fillColor: categoryColors[cat],
+      fillOpacity: 0.85,
+      weight: 2,
+      renderer: canvasRenderer
+    }).bindPopup(popupHtml(rec)).addTo(layersByCategory[cat]);
+
+    markerIndex.push({ marker: m, record: rec });
+  }
+});
+
+/* =========================
+   4) Single-select interaction + ALL
+   ========================= */
+var legend = document.getElementById("legend");
+var activeCategory = null; // null = ALL
+
+function renderLegend(){
+  let html = `<div class="title">Filter by Category</div>`;
+
+  html += `
+    <div class="item ${activeCategory===null ? "active" : ""}" data-cat="__ALL__">
+      <span class="swatch" style="background:#111"></span>
+      <span><strong>ALL</strong></span>
+    </div>
+    <div class="divider"></div>
+  `;
+
+  categories.forEach(c => {
+    let isActive = (activeCategory === c);
+    html += `
+      <div class="item ${isActive ? "active" : ""}" data-cat="${esc(c)}">
+        <span class="swatch" style="background:${categoryColors[c]}"></span>
+        <span>${esc(c)}</span>
+      </div>`;
+  });
+
+  html += `<div class="hint">Click a category to isolate it. Click <b>ALL</b> to return.</div>`;
+  legend.innerHTML = html;
+
+  Array.from(legend.querySelectorAll(".item")).forEach(el => {
+    el.addEventListener("click", () => {
+      let cat = el.getAttribute("data-cat");
+      activeCategory = (cat === "__ALL__") ? null : cat;
+
+      applyCategoryVisibility();
+      renderLegend();
+      refreshSearchIndex();
+      hideSearchResultsOnly();
+    });
+  });
+}
+
+function applyCategoryVisibility(){
+  if(activeCategory === null){
+    categories.forEach(c => map.addLayer(layersByCategory[c]));
+    return;
+  }
+  categories.forEach(c => {
+    if(c === activeCategory) map.addLayer(layersByCategory[c]);
+    else map.removeLayer(layersByCategory[c]);
+  });
+}
+
+/* =========================
+   5) Search (only searches visible layers)
+   ========================= */
+var searchInput = document.getElementById("searchInput");
+var searchResults = document.getElementById("searchResults");
+var activeSearch = [];
+
+function refreshSearchIndex(){
+  activeSearch = markerIndex.filter(x => map.hasLayer(layersByCategory[x.record.category]));
+}
+
+function hideSearchResultsOnly(){
+  searchResults.style.display = "none";
+  searchResults.innerHTML = "";
+}
+
+function showResults(items){
+  if(items.length === 0){
+    searchResults.style.display = "none";
+    searchResults.innerHTML = "";
+    return;
+  }
+  searchResults.style.display = "block";
+  searchResults.innerHTML = items.map((x, idx) => {
+    let r = x.record;
+    return `<div data-idx="${idx}">
+      <strong>${esc(r.id)}</strong> — ${esc(r.area)}<br/>
+      <span style="color:#666;font-size:12px;">${esc(r.category)}</span>
+    </div>`;
+  }).join("");
+
+  Array.from(searchResults.querySelectorAll("div")).forEach(div => {
+    div.addEventListener("click", () => {
+      let idx = parseInt(div.getAttribute("data-idx"), 10);
+      let target = items[idx];
+      map.setView(target.marker.getLatLng(), 14);
+      target.marker.openPopup();
+      searchResults.style.display = "none";
+    });
+  });
+}
+
+searchInput.addEventListener("input", () => {
+  let q = searchInput.value.trim().toLowerCase();
+  if(!q){ showResults([]); return; }
+
+  let hits = activeSearch.filter(x => {
+    let r = x.record;
+    return (
+      String(r.id).toLowerCase().includes(q) ||
+      String(r.area).toLowerCase().includes(q) ||
+      String(r.category).toLowerCase().includes(q)
+    );
+  }).slice(0, 25);
+
+  showResults(hits);
+});
+
+map.on("click", () => { searchResults.style.display = "none"; });
+
+/* init */
+renderLegend();
+applyCategoryVisibility();
+refreshSearchIndex();
+</script>
+</body>
+</html>
+
+</template>
+
+<template id="tpl-debtinsv8">
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Debtor Insights – Municipal Debtor Intelligence</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+
+<style>
+  :root{
+    --blue:#0097d8;
+    --ink:#0f172a;
+    --muted:#5d6773;
+    --line:#e7edf3;
+    --cardshadow: 0 10px 22px rgba(16,24,40,0.05);
+    --radius:16px;
+    --base:10.5px;
+    --heading:#0b2d5c;
+      
+    /* Controls how far left/right the Balance Outstanding column sits */
+    --summaryValueCol: 170px;
+    --summaryRightInset: 550px; /* extra blank space on the right to pull the column left */
+}
+
+  body{
+    font-family:'Open Sans', Arial, sans-serif;
+    font-size: var(--base);
+    background:#fff;
+    color:var(--ink);
+    margin:0;
+  }
+  .wrap{
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 18px;
+  }
+
+  h1{
+    font-size: 16px;
+    margin: 0 0 6px 0;
+  }
+  .subhead{
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+
+  /* Cards */
+  .card{
+    border:1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--cardshadow);
+    background:#fff;
+  }
+
+  /* KPI tiles */
+  .kpis{
+    display:grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-top: 12px;
+  }
+  .kpi{
+    padding: 14px;
+  }
+  .kpi .label{
+    color: var(--muted);
+    font-size: 10px;
+    margin-bottom: 6px;
+  }
+  .kpi .value{
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--blue);
+    line-height: 1.1;
+  }
+  .kpi .subvalue{
+    margin-top: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--heading);
+  }
+  .kpi .subnote{
+    margin-top: 2px;
+    color: var(--muted);
+    font-size: 10px;
+  }
+
+  /* Sections */
+  .section{
+    margin-top: 18px;
+  }
+  .sectionHeader{
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    gap: 12px;
+    padding: 14px 16px 10px 16px;
+    border-bottom: 1px solid var(--line);
+  }
+  .sectionHeader h2{
+    font-size: 14px;
+    margin: 0;
+  }
+  .sectionHeader .note{
+    color: var(--muted);
+    font-size: 10.2px;
+    margin-bottom: 2px;
+  }
+  .sectionBody{
+    padding: 14px 16px 16px 16px;
+  }
+
+  .insight{
+    margin-top: 10px;
+    color: var(--heading);
+    font-weight: 600;
+  }
+
+  /* Default chart sizing */
+  canvas{ width:100% !important; max-height: 340px; }
+
+  /* ✅ IMPORTANT: allow the corrected chart to be taller (13 categories) */
+  #dqCorrectedChart{
+    max-height: none !important;
+    height: 440px !important; /* adjust 420–520px if you want more/less spacing */
+  }
+
+  /* Insights summary block */
+  .insightsSummary{
+    padding: 14px 16px;
+    padding-right: calc(16px + var(--summaryRightInset));
+    margin-top: 14px;
+  }
+  .insightsSummary h2{
+    font-size: 14px;
+    margin: 0 0 8px 0;
+  }
+  /* ✅ Header + rows use same 2-column grid so the values are NOT pushed to the far right */
+  .summaryHeaderRow{
+    display:grid;
+    grid-template-columns: 1fr var(--summaryValueCol);
+    gap: 12px;
+    align-items:end;
+    margin-bottom: 8px;
+  }
+  .summaryHeaderRight{
+    font-weight:700;
+    color:var(--heading);
+    font-size:11px;
+    text-align:right;
+    white-space: nowrap;
+  }
+
+  .summaryList{
+    display:grid;
+    grid-template-columns: 1fr;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .summaryItem{
+    display:grid;
+    grid-template-columns: 1fr var(--summaryValueCol);
+    gap: 12px;
+    padding: 8px 10px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: #fbfdff;
+  }
+  .summaryItem .left{
+    display:flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .summaryItem .title{
+    font-weight: 700;
+    color: var(--heading);
+    font-size: 11px;
+  }
+  .summaryItem .count{
+    color: var(--muted);
+    font-size: 10px;
+  }
+  .summaryItem .bal{
+    font-weight: 700;
+    color: var(--ink);
+    white-space: nowrap;
+    align-self: center;
+    font-size: 11px;
+     text-align: right;
+  }
+
+  /* Data quality layout */
+  .dqGrid{
+    display:grid;
+    grid-template-columns: 1.25fr 0.75fr;
+    gap: 14px;
+    align-items: start;
+  }
+  @media (max-width: 980px){
+    :root{ --summaryRightInset: 0px; }
+    .kpis{ grid-template-columns: repeat(2, 1fr); }
+    .dqGrid{ grid-template-columns: 1fr; }
+    #dqCorrectedChart{ height: 480px !important; }
+  }
+
+  table{
+    width:100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    overflow:hidden;
+    border-radius: 14px;
+    border: 1px solid var(--line);
+  }
+  thead th{
+    background:#f8fbfe;
+    color: var(--heading);
+    font-size: 10.2px;
+    text-align:left;
+    padding: 10px 10px;
+    border-bottom: 1px solid var(--line);
+  }
+  tbody td{
+    padding: 9px 10px;
+    border-bottom: 1px solid var(--line);
+    font-size: 10.2px;
+    vertical-align: middle;
+  }
+  tbody tr:last-child td{ border-bottom:0; }
+
+  .num{ text-align:right; font-variant-numeric: tabular-nums; }
+  .pctCell{
+    text-align:right;
+    font-variant-numeric: tabular-nums;
+    border-radius: 10px;
+  }
+  .pctWrap{
+    display:inline-block;
+    min-width: 70px;
+    text-align:right;
+    padding: 5px 8px;
+    border-radius: 10px;
+    font-weight: 700;
+  }
+
+  .smallNote{
+    color: var(--muted);
+    font-size: 10px;
+    margin-top: 6px;
+  }
+
+  /* -------- Animation polish -------- */
+  .pulse { animation: pulseGlow 1.15s ease-out 1; }
+  @keyframes pulseGlow{
+    0%   { box-shadow: var(--cardshadow); }
+    50%  { box-shadow: 0 14px 28px rgba(0,151,216,0.18); }
+    100% { box-shadow: var(--cardshadow); }
+  }
+</style>
+</head>
+
+<body>
+<div class="wrap">
+
+  <h1>Debtor Insights</h1>
+  <div class="subhead">KZN Cape Municipality · Municipal Debtor Intelligence</div>
+
+  <!-- KPI SUMMARY -->
+  <div class="kpis">
+    <div class="card kpi">
+      <div class="label">Total Debtors</div>
+      <div class="value">83,869</div>
+    </div>
+
+    <div class="card kpi">
+      <div class="label">Unique Entities</div>
+      <div class="value">71,289</div>
+    </div>
+
+    <div class="card kpi">
+      <div class="label">Potential Ghost Debtors</div>
+      <div class="value">443</div>
+      <div class="subnote">Unique ghost entities: 332</div>
+    </div>
+
+    <div class="card kpi">
+      <div class="label">Total Outstanding Balance</div>
+      <div class="value">R146.7m</div>
+      <div class="subvalue">Total Arrears</div>
+      <div class="subnote"><b>R55.9m</b></div>
+    </div>
+  </div>
+
+  <!-- INSIGHTS SUMMARY -->
+  <div class="card insightsSummary">
+    <div class="summaryHeaderRow">
+      <h2 style="margin:0;">Insights Summary</h2>
+      <div class="summaryHeaderRight">Balance Outstanding</div>
+    </div>
+
+    <ul class="summaryList">
+      <li class="summaryItem">
+        <div class="left">
+          <div class="title">Owning property in other Municipalities</div>
+          <div class="count">Total: 8,098</div>
+        </div>
+        <div class="bal">R 17,604,398.84</div>
+      </li>
+
+      <li class="summaryItem">
+        <div class="left">
+          <div class="title">Individuals in Credit Distress</div>
+          <div class="count">Total: 4,290</div>
+        </div>
+        <div class="bal">R 8,068,682.80</div>
+      </li>
+
+      <li class="summaryItem">
+        <div class="left">
+          <div class="title">Companies De-Registered</div>
+          <div class="count">Total: 1,509</div>
+        </div>
+        <div class="bal">R 4,254,396.39</div>
+      </li>
+
+      <li class="summaryItem">
+        <div class="left">
+          <div class="title">Companies Liquidated</div>
+          <div class="count">Total: 977</div>
+        </div>
+        <div class="bal">R 2,200,549.85</div>
+      </li>
+
+      <li class="summaryItem">
+        <div class="left">
+          <div class="title">Indigency rules not met</div>
+          <div class="count">Total: 266</div>
+        </div>
+        <div class="bal">R 469,450.64</div>
+      </li>
+
+      <li class="summaryItem">
+        <div class="left">
+          <div class="title">Indigent earning high salary</div>
+          <div class="count">Total: 102</div>
+        </div>
+        <div class="bal">R 293,406.65</div>
+      </li>
+
+      <li class="summaryItem">
+        <div class="left">
+          <div class="title">Indigent with multiple properties</div>
+          <div class="count">Total: 67</div>
+        </div>
+        <div class="bal">R 132,032.99</div>
+      </li>
+
+      <li class="summaryItem">
+        <div class="left">
+          <div class="title">Indigent with high property value</div>
+          <div class="count">Total: 44</div>
+        </div>
+        <div class="bal">R 101,225.29</div>
+      </li>
+
+      <li class="summaryItem">
+        <div class="left">
+          <div class="title">Trusts Dissolved</div>
+          <div class="count">Total: 204</div>
+        </div>
+        <div class="bal">R 146,703.32</div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- PORTFOLIO COMPOSITION -->
+  <div class="card section">
+    <div class="sectionHeader">
+      <div>
+        <h2>Portfolio Composition</h2>
+        <div class="note">Total Accounts by portfolio category</div>
+      </div>
+    </div>
+    <div class="sectionBody">
+      <canvas id="portfolioChart"></canvas>
+      <div class="insight">
+        Government and Individual debtors make up nearly 50% of the debtor base, but require very different recovery strategies.
+      </div>
+    </div>
+  </div>
+
+  <!-- DATA QUALITY VIEW -->
+  <div class="card section">
+    <div class="sectionHeader">
+      <div>
+        <h2>Data Quality View</h2>
+        <div class="note">Valid vs Invalid (with conditional formatting)</div>
+      </div>
+    </div>
+    <div class="sectionBody">
+      <div class="dqGrid">
+        <div>
+          <table id="dqTable">
+            <thead>
+              <tr>
+                <th>Field</th>
+                <th class="num">Valid</th>
+                <th class="num">% Valid</th>
+                <th class="num">Invalid</th>
+                <th class="num">% Invalid</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Identification Details</td>
+                <td class="num">12,455</td>
+                <td class="num pctCell" data-pct="70.4"><span class="pctWrap">70.4%</span></td>
+                <td class="num">5,234</td>
+                <td class="num pctCell" data-pct="29.6"><span class="pctWrap">29.6%</span></td>
+              </tr>
+              <tr>
+                <td>Individual Name</td>
+                <td class="num">9,888</td>
+                <td class="num pctCell" data-pct="55.9"><span class="pctWrap">55.9%</span></td>
+                <td class="num">7,801</td>
+                <td class="num pctCell" data-pct="44.1"><span class="pctWrap">44.1%</span></td>
+              </tr>
+              <tr>
+                <td>Individual Surname</td>
+                <td class="num">10,446</td>
+                <td class="num pctCell" data-pct="59.1"><span class="pctWrap">59.1%</span></td>
+                <td class="num">7,243</td>
+                <td class="num pctCell" data-pct="40.9"><span class="pctWrap">40.9%</span></td>
+              </tr>
+              <tr>
+                <td>Business Name</td>
+                <td class="num">8,799</td>
+                <td class="num pctCell" data-pct="56.2"><span class="pctWrap">56.2%</span></td>
+                <td class="num">6,856</td>
+                <td class="num pctCell" data-pct="43.8"><span class="pctWrap">43.8%</span></td>
+              </tr>
+              <tr>
+                <td>Business Registration Number</td>
+                <td class="num">10,992</td>
+                <td class="num pctCell" data-pct="70.2"><span class="pctWrap">70.2%</span></td>
+                <td class="num">4,663</td>
+                <td class="num pctCell" data-pct="29.8"><span class="pctWrap">29.8%</span></td>
+              </tr>
+              <tr>
+                <td>Trust Name</td>
+                <td class="num">3,767</td>
+                <td class="num pctCell" data-pct="38.1"><span class="pctWrap">38.1%</span></td>
+                <td class="num">6,109</td>
+                <td class="num pctCell" data-pct="61.9"><span class="pctWrap">61.9%</span></td>
+              </tr>
+              <tr>
+                <td>Trust Number</td>
+                <td class="num">4,331</td>
+                <td class="num pctCell" data-pct="43.9"><span class="pctWrap">43.9%</span></td>
+                <td class="num">5,545</td>
+                <td class="num pctCell" data-pct="56.1"><span class="pctWrap">56.1%</span></td>
+              </tr>
+              <tr>
+                <td>Street Address</td>
+                <td class="num">16,565</td>
+                <td class="num pctCell" data-pct="49.7"><span class="pctWrap">49.7%</span></td>
+                <td class="num">16,779</td>
+                <td class="num pctCell" data-pct="50.3"><span class="pctWrap">50.3%</span></td>
+              </tr>
+              <tr>
+                <td>ERF Numbers</td>
+                <td class="num">18,484</td>
+                <td class="num pctCell" data-pct="55.4"><span class="pctWrap">55.4%</span></td>
+                <td class="num">14,860</td>
+                <td class="num pctCell" data-pct="44.6"><span class="pctWrap">44.6%</span></td>
+              </tr>
+              <tr>
+                <td>Home Telephone</td>
+                <td class="num">2,098</td>
+                <td class="num pctCell" data-pct="11.9"><span class="pctWrap">11.9%</span></td>
+                <td class="num">15,591</td>
+                <td class="num pctCell" data-pct="88.1"><span class="pctWrap">88.1%</span></td>
+              </tr>
+              <tr>
+                <td>Work Telephone</td>
+                <td class="num">3,980</td>
+                <td class="num pctCell" data-pct="22.5"><span class="pctWrap">22.5%</span></td>
+                <td class="num">13,709</td>
+                <td class="num pctCell" data-pct="77.5"><span class="pctWrap">77.5%</span></td>
+              </tr>
+              <tr>
+                <td>Cell Number</td>
+                <td class="num">8,256</td>
+                <td class="num pctCell" data-pct="46.7"><span class="pctWrap">46.7%</span></td>
+                <td class="num">9,433</td>
+                <td class="num pctCell" data-pct="53.3"><span class="pctWrap">53.3%</span></td>
+              </tr>
+              <tr>
+                <td>Email Address</td>
+                <td class="num">1,007</td>
+                <td class="num pctCell" data-pct="5.7"><span class="pctWrap">5.7%</span></td>
+                <td class="num">16,682</td>
+                <td class="num pctCell" data-pct="94.3"><span class="pctWrap">94.3%</span></td>
+              </tr>
+            </tbody>
+          </table>
+
+
+       
+          <div class="smallNote">
+            More than 120 000 key data attributes were invalid
+          </div>
+        </div>
+
+        <div>
+  <div class="insight" style="margin-top:0;">
+    Data Quality Issues Resolved by LK Centrix
+  </div>
+  <div class="smallNote" style="margin-top:4px; margin-bottom:10px;">
+    The validation and enrichment process standardises records, corrects structure, and improves match confidence across debtor identity and contactability.
+  </div>
+
+  <canvas id="dqCorrectedChart"></canvas>
+
+  <div class="smallNote">
+    Municipal records corrected by LK Centrix
+  </div>
+</div>
+
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ARREARS AGE vs PROPENSITY -->
+  <div class="card section">
+    <div class="sectionHeader">
+      <div>
+        <h2>Arrears Age vs Recovery Potential</h2>
+        <div class="note">Balance distribution and LK Centrix recovery modelling</div>
+      </div>
+    </div>
+    <div class="sectionBody">
+      <canvas id="arrearsChart"></canvas>
+      <div class="insight">
+        Based on LK Centrix modelling and debtor profiling, the recovery potential is quite high across all arrear stages.
+      </div>
+    </div>
+  </div>
+
+  <!-- LIFE STATUS -->
+  <div class="card section">
+    <div class="sectionHeader">
+      <div>
+        <h2>Life Status Risk (Home Affairs)</h2>
+        <div class="note">Alive vs Deceased across Individuals, Directors and Trustees</div>
+      </div>
+    </div>
+    <div class="sectionBody">
+      <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:14px;">
+        <div class="card" style="padding:12px;">
+          <div style="font-weight:700; color:var(--heading); margin-bottom:6px;">Individuals</div>
+          <canvas id="lifeIndividuals"></canvas>
+        </div>
+        <div class="card" style="padding:12px;">
+          <div style="font-weight:700; color:var(--heading); margin-bottom:6px;">Directors</div>
+          <canvas id="lifeDirectors"></canvas>
+        </div>
+        <div class="card" style="padding:12px;">
+          <div style="font-weight:700; color:var(--heading); margin-bottom:6px;">Trustees</div>
+          <canvas id="lifeTrustees"></canvas>
+        </div>
+      </div>
+      <div class="insight" style="margin-top:12px;">
+        Deceased-linked entities require executor tracing and estate-based recovery workflows.
+      </div>
+    </div>
+  </div>
+
+  <!-- DATA ENRICHMENT -->
+  <div class="card section">
+    <div class="sectionHeader">
+      <div>
+        <h2>Data Enrichment Outcomes</h2>
+        <div class="note">New relationships and contactability improvements identified</div>
+      </div>
+    </div>
+    <div class="sectionBody">
+      <canvas id="enrichmentChart"></canvas>
+      <div class="insight">
+        Enrichment improves reachability and reveals additional linked entities and locations for segmentation and collection prioritisation.
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // Guard: plugin available?
+  if (window.ChartDataLabels) Chart.register(ChartDataLabels);
+
+  /* ---------- Animate charts only when visible + pulse card ---------- */
+  const chartQueue = [];
+  function buildOnView(canvasId, buildFn){
+    chartQueue.push({ canvasId, buildFn, built:false });
+  }
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const item = chartQueue.find(x => x.canvasId === entry.target.id);
+      if (item && !item.built){
+        item.built = true;
+        pulseCardForCanvas(item.canvasId);
+        item.buildFn();
+      }
+    });
+  }, { threshold: 0.25 });
+
+  function pulseCardForCanvas(canvasId){
+    const canvas = document.getElementById(canvasId);
+    if (!canvas) return;
+    const card = canvas.closest('.card');
+    if (!card) return;
+    card.classList.remove('pulse');
+    void card.offsetWidth;
+    card.classList.add('pulse');
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    chartQueue.forEach(item => {
+      const el = document.getElementById(item.canvasId);
+      if (el) io.observe(el);
+    });
+  });
+
+  /* ---------- helpers ---------- */
+  const fmtInt = (n) => new Intl.NumberFormat('en-ZA').format(n);
+
+  function pctColor(p){
+    if (p >= 70) return {bg:'rgba(34,197,94,0.16)', fg:'#166534'};
+    if (p >= 45) return {bg:'rgba(245,158,11,0.18)', fg:'#92400e'};
+    return {bg:'rgba(239,68,68,0.16)', fg:'#991b1b'};
+  }
+  function applyDQConditionalFormatting(){
+    const cells = document.querySelectorAll('#dqTable .pctCell');
+    cells.forEach(td=>{
+      const pct = parseFloat(td.getAttribute('data-pct'));
+      const span = td.querySelector('.pctWrap');
+      const c = pctColor(pct);
+      span.style.background = c.bg;
+      span.style.color = c.fg;
+    });
+  }
+  applyDQConditionalFormatting();
+
+  /* ---------- Portfolio Composition ---------- */
+  const portfolioLabels = ['Government','Individual','Business','Municipal','Trusts','Religious'];
+  const portfolioData = [22982,17689,15655,14112,9876,3555];
+
+  buildOnView('portfolioChart', () => {
+    new Chart(document.getElementById('portfolioChart'), {
+      type: 'bar',
+      data: {
+        labels: portfolioLabels,
+        datasets: [{
+          label: 'Total Accounts',
+          data: portfolioData,
+          backgroundColor: '#0097d8',
+          borderRadius: 10
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: {
+          duration: 1500,
+          easing: 'easeOutQuart',
+          delay: (ctx) => (ctx.type === 'data' ? ctx.dataIndex * 120 : 0)
+        },
+        plugins: {
+          legend: { display: false },
+          datalabels: {
+            anchor: 'end',
+            align: 'end',
+            color: '#0f172a',
+            font: { weight: '700' },
+            formatter: (v)=> fmtInt(v)
+          },
+          tooltip: {
+            callbacks: { label: (ctx)=> ` ${fmtInt(ctx.raw)}` }
+          }
+        },
+        scales: {
+          x: { grid: { color: '#eef3f8' }, ticks: { color: '#5d6773' } },
+          y: { grid: { display: false }, ticks: { color: '#0b2d5c', font: { weight: '700' } } }
+        }
+      }
+    });
+  });
+
+  /* ---------- ✅ Data Quality Corrected chart (13 categories, no autoskip) ---------- */
+  const dqCorrLabels = [
+    'Identification Details',
+    'Individual Name',
+    'Individual Surname',
+    'Business Name',
+    'Business Registration Number',
+    'Trust Name',
+    'Trust Number',
+    'Street Address',
+    'ERF Numbers',
+    'Home Telephone',
+    'Work Telephone',
+    'Cell Number',
+    'Email Address'
+  ];
+
+  const dqCorrectedCounts = [5188,7754,7235,6790,4632,5587,5346,15998,14332,15003,13003,9089,12098];
+  const dqCorrectedPct    = [99.1,99.4,99.9,99.0,99.3,91.5,96.4,95.3,96.4,96.2,94.9,96.4,72.5];
+
+  const correctedPctLabelPlugin = {
+    id: 'correctedPctLabelPlugin',
+    afterDatasetsDraw(chart) {
+      const { ctx, chartArea } = chart;
+      const meta = chart.getDatasetMeta(0);
+      if (!meta || !meta.data) return;
+
+      ctx.save();
+      ctx.fillStyle = '#5d6773';
+      ctx.font = '600 11px Open Sans, Arial';
+      ctx.textBaseline = 'middle';
+
+      dqCorrectedPct.forEach((p, i) => {
+        const barEl = meta.data[i];
+        if (!barEl) return;
+        const yPos = barEl.y;
+        const xPos = chartArea.left + 6;
+        ctx.fillText(p.toFixed(1).replace('.', ',') + '%', xPos, yPos);
+      });
+
+      ctx.restore();
+    }
+  };
+
+  buildOnView('dqCorrectedChart', () => {
+    new Chart(document.getElementById('dqCorrectedChart'), {
+      type: 'bar',
+      data: {
+        labels: dqCorrLabels,
+        datasets: [{
+          label: 'Corrected',
+          data: dqCorrectedCounts,
+          backgroundColor: 'rgba(0, 151, 216, 0.85)',
+          borderRadius: 10
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false, // ✅ critical when you control height via CSS
+        animation: {
+          duration: 1700,
+          easing: 'easeOutQuart',
+          delay: (ctx) => (ctx.type === 'data' ? ctx.dataIndex * 85 : 0)
+        },
+        plugins: {
+          legend: { display: false },
+          datalabels: {
+            anchor: 'end',
+            align: 'end',
+            color: '#0f172a',
+            font: { weight: '700' },
+            formatter: (v) => fmtInt(v)
+          },
+          tooltip: {
+            callbacks: {
+              label: (ctx) => {
+                const i = ctx.dataIndex;
+                return ` Corrected: ${fmtInt(ctx.raw)} (${dqCorrectedPct[i].toFixed(1)}%)`;
+              }
+            }
+          }
+        },
+        scales: {
+          x: { grid: { color:'#eef3f8' }, ticks: { color:'#5d6773' } },
+          y: {
+            grid: { display:false },
+            ticks: {
+              color:'#0b2d5c',
+              font:{ weight:'700', size: 10 },
+              autoSkip: false, // ✅ SHOW ALL 13 LABELS
+              maxRotation: 0,
+              minRotation: 0
+            }
+          }
+        }
+      },
+      plugins: [correctedPctLabelPlugin, window.ChartDataLabels].filter(Boolean)
+    });
+  });
+
+  /* ---------- Arrears chart ---------- */
+  const arrearsLabels = ['Current','30 Days','60 Days','90 Days','120 Days','150 Days','180 Days'];
+  const balanceMillions = [90.8958,5.1068,3.6301,3.3127,3.0547,2.8907,37.8124];
+  const highProp = [89,79,71,66,47,40,61];
+
+  buildOnView('arrearsChart', () => {
+    new Chart(document.getElementById('arrearsChart'), {
+      data: {
+        labels: arrearsLabels,
+        datasets: [
+          {
+            type:'bar',
+            label:'Balance (R million)',
+            data: balanceMillions,
+            backgroundColor:'#0097d8',
+            borderRadius:10
+          },
+          {
+            type:'line',
+            label:'High Recovery Potential (%)',
+            data: highProp,
+            borderColor:'#22c55e',
+            pointBackgroundColor:'#22c55e',
+            tension:0.3,
+            yAxisID: 'y2'
+          }
+        ]
+      },
+      options:{
+        responsive: true,
+        maintainAspectRatio: false,
+        animation:{ duration: 1700, easing:'easeOutCubic' },
+        elements:{ line:{ borderWidth:3 }, point:{ radius:4, hoverRadius:6 } },
+        animations:{ tension:{ duration:1700, easing:'easeOutQuart', from:0.6, to:0.3 } },
+        plugins:{
+          legend:{ position:'bottom' },
+          datalabels:{
+            display: (ctx)=> ctx.dataset.type === 'bar',
+            anchor:'end',
+            align:'end',
+            color:'#0f172a',
+            font:{ weight:'700' },
+            formatter:(v)=> 'R ' + v.toFixed(1) + 'm'
+          }
+        },
+        scales:{
+          y: {
+            title:{ display:true, text:'Balance (R million)' },
+            grid:{ color:'#eef3f8' },
+            ticks:{ color:'#5d6773' }
+          },
+          y2:{
+            position:'right',
+            title:{ display:true, text:'Recovery Potential (%)' },
+            min: 0,
+            max: 100,
+            grid:{ drawOnChartArea:false },
+            ticks:{ color:'#5d6773', callback:(v)=> v+'%' }
+          },
+          x:{ grid:{ display:false }, ticks:{ color:'#5d6773' } }
+        }
+      }
+    });
+  });
+
+  /* ---------- Life Status ---------- */
+  function doughnutWithCounts(canvasId, alive, deceased){
+    const total = alive + deceased;
+    buildOnView(canvasId, () => {
+      new Chart(document.getElementById(canvasId), {
+        type:'doughnut',
+        data:{
+          labels:['Alive','Deceased'],
+          datasets:[{
+            data:[alive, deceased],
+            backgroundColor:['#0097d8','rgba(239,68,68,0.85)'],
+            borderWidth: 0
+          }]
+        },
+        options:{
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout:'62%',
+          animation:{ duration: 1400, easing:'easeOutQuart' },
+          plugins:{
+            legend:{ position:'bottom' },
+            tooltip:{
+              callbacks:{
+                label:(ctx)=>{
+                  const v = ctx.raw;
+                  const pct = (v/total*100).toFixed(0);
+                  return ` ${ctx.label}: ${fmtInt(v)} (${pct}%)`;
+                }
+              }
+            },
+            datalabels:{
+              color:'#0f172a',
+              font:{ weight:'700', size:10 },
+              formatter:(v)=>{
+                const pct = (v/total*100).toFixed(0);
+                return `${fmtInt(v)}\n${pct}%`;
+              }
+            }
+          }
+        }
+      });
+    });
+  }
+
+  doughnutWithCounts('lifeIndividuals', 14328, 3361);
+  doughnutWithCounts('lifeDirectors', 35693, 11272);
+  doughnutWithCounts('lifeTrustees', 16295, 3457);
+
+  /* ---------- Enrichment Outcomes ---------- */
+  const enrichLabels = [
+    'New Cell Numbers',
+    'Spouses Identified',
+    'Spouses Contact Info Added',
+    'New Geo Locations',
+    'New Directors Identified',
+    'New Home Telephone',
+    'New Email Addresses',
+    'New Employer Identified',
+    'Government Employee Flags',
+    'New Work Numbers',
+    'New Trustees Identified'
+  ];
+  const enrichValues = [23805,20098,19981,20071,8977,6867,6512,6445,3772,5991,2668];
+
+  buildOnView('enrichmentChart', () => {
+    new Chart(document.getElementById('enrichmentChart'), {
+      type:'bar',
+      data:{
+        labels: enrichLabels,
+        datasets:[{
+          label:'Total Identified',
+          data: enrichValues,
+          backgroundColor: '#0097d8',
+          borderRadius: 10
+        }]
+      },
+      options:{
+        indexAxis:'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        animation:{
+          duration: 1700,
+          easing:'easeOutQuart',
+          delay:(ctx)=> (ctx.type==='data' ? ctx.dataIndex*90 : 0)
+        },
+        plugins:{
+          legend:{ display:false },
+          datalabels:{
+            anchor:'end',
+            align:'end',
+            color:'#0f172a',
+            font:{ weight:'700' },
+            formatter:(v)=> fmtInt(v)
+          },
+          tooltip:{
+            callbacks:{ label:(ctx)=> ` ${fmtInt(ctx.raw)}` }
+          }
+        },
+        scales:{
+          x:{ grid:{ color:'#eef3f8' }, ticks:{ color:'#5d6773' } },
+          y:{ grid:{ display:false }, ticks:{ color:'#0b2d5c', font:{ weight:'700' } } }
+        }
+      }
+    });
+  });
+
+</script>
+</body>
+</html>
+
+</template>
+
+<template id="tpl-debtstrat2">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Municipal Debtor Intelligence — Debt Strategy</title>
+
+  <!-- Open Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <style>
+    :root{
+      --blue:#0097d8;
+      --teal (typo fix):#3ecfff;
+      --teal:#3ecfff;
+      --ink:#0f172a;
+      --muted:#5d6773;
+      --line:#e7edf3;
+      --shadow: 0 10px 28px rgba(16,24,40,0.08);
+      --radius: 16px;
+      --base: 10.5px;
+      --heading:#0b2d5c;
+
+      --ok:#16a34a;
+      --warn:#f59e0b;
+      --risk:#ef4444;
+      --violet:#7c3aed;
+      --slate:#64748b;
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family:"Open Sans", Arial, sans-serif;
+      font-size:var(--base);
+      color:var(--ink);
+      background:#fff;
+    }
+    .wrap{ max-width:1100px; margin:0 auto; padding:0 18px; }
+
+    /* Top header (standalone page) */
+    .header{
+      border-bottom:1px solid #e5e7eb;
+      background:#fff;
+      position:sticky;
+      top:0;
+      z-index:2000;
+    }
+    .header-row{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      padding:14px 0;
+    }
+    .logo img{ height:44px; display:block; }
+    .brand{
+      font-weight:700;
+      letter-spacing:.4px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:6px;
+      align-items:baseline;
+    }
+    .brand .lk{ color:#6b7280; }
+    .brand .solutions{ color:#0b2d5c; }
+    .brand .product{ color:#111827; }
+
+    .hero{
+      margin: 16px 0 12px;
+      border-radius: var(--radius);
+      padding: 16px 16px 14px;
+      background:
+        radial-gradient(900px 260px at 15% 0%, rgba(0,151,216,0.22), transparent 62%),
+        radial-gradient(700px 240px at 85% 10%, rgba(62,207,255,0.18), transparent 60%),
+        linear-gradient(180deg,#fff,#fbfdff);
+      border:1px solid var(--line);
+      box-shadow: var(--shadow);
+    }
+    .hero h1{ margin:0 0 8px 0; font-size:16px; line-height:1.25; }
+    .hero p{ margin:0; font-size:11.2px; color:var(--muted); }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.35fr 1fr;
+      gap:12px;
+      margin: 12px 0 18px;
+    }
+    .card{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .cardHead{
+      padding:12px 12px 10px;
+      border-bottom:1px solid var(--line);
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+      background: linear-gradient(180deg,#ffffff,#fbfdff);
+    }
+    .cardTitle{
+      font-weight:700;
+      font-size:11.6px;
+      color:var(--heading);
+      margin:0;
+      line-height:1.25;
+    }
+    .cardNote{
+      margin-top:4px;
+      color:var(--muted);
+      font-size:10.4px;
+      line-height:1.35;
+      max-width: 740px;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:7px;
+      padding:7px 10px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:#fff;
+      font-size:10.2px;
+      color:var(--heading);
+      box-shadow: 0 10px 22px rgba(16,24,40,0.05);
+      white-space:nowrap;
+      user-select:none;
+      flex:0 0 auto;
+    }
+    .dot{
+      width:8px;height:8px;border-radius:999px;
+      background: var(--blue);
+      box-shadow: 0 0 0 4px rgba(0,151,216,0.12);
+    }
+    .cardBody{ padding:12px; }
+
+    .kpis{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:10px;
+      margin-top: 10px;
+    }
+    .kpi{
+      border:1px solid var(--line);
+      border-radius: 14px;
+      padding:10px 10px 9px;
+      background:#fff;
+      box-shadow: 0 10px 22px rgba(16,24,40,0.04);
+      position:relative;
+      overflow:hidden;
+    }
+    .kpi:before{
+      content:"";
+      position:absolute;
+      left:10px; top:10px;
+      width:26px; height:3px;
+      border-radius:999px;
+      background: var(--blue);
+      opacity:0.95;
+    }
+    .kpiLabel{ color:var(--muted); font-size:10px; margin-top:8px; }
+    .kpiVal{ font-weight:800; color:var(--ink); font-size:14px; margin-top:4px; letter-spacing:.2px; }
+    .kpiSub{ color:var(--muted); font-size:10.2px; margin-top:3px; }
+
+    .row{
+      display:grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap:12px;
+      margin: 12px 0 18px;
+    }
+
+    .chartWrap{ position:relative; height: 260px; }
+    .chartWrap.tall{ height: 300px; }
+
+    .chartLegend{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px 12px;
+      margin-top:10px;
+    }
+    .legItem{
+      display:flex;
+      align-items:center;
+      gap:7px;
+      font-size:10.2px;
+      color:var(--muted);
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:6px 10px;
+      background:#fff;
+    }
+    .swatch{ width:10px; height:10px; border-radius:3px; background:#ddd; }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      font-size:10.4px;
+    }
+    th, td{
+      padding:9px 10px;
+      border-bottom:1px solid var(--line);
+      text-align:left;
+      vertical-align:top;
+    }
+    th{
+      color:var(--heading);
+      font-weight:700;
+      background:#fbfdff;
+    }
+    td.right{ text-align:right; white-space:nowrap; }
+
+    .muted{ color:var(--muted); }
+
+    .tag{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      border-radius:999px;
+      padding:5px 9px;
+      border:1px solid var(--line);
+      background:#fff;
+      font-size:10px;
+      color:var(--heading);
+      white-space:nowrap;
+    }
+    .tag i{
+      display:inline-block;
+      width:8px;height:8px;border-radius:999px;
+      background: var(--slate);
+    }
+    .tag.ok i{ background: var(--ok); }
+    .tag.warn i{ background: var(--warn); }
+    .tag.risk i{ background: var(--risk); }
+    .tag.violet i{ background: var(--violet); }
+
+    .foot{
+      padding: 10px 0 22px;
+      color:var(--muted);
+      font-size:10.2px;
+    }
+
+    /* Entrance */
+    .fadeUp{
+      opacity:0;
+      transform: translateY(10px);
+      transition: opacity .55s ease, transform .55s ease;
+    }
+    .fadeUp.show{
+      opacity:1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 980px){
+      .grid{ grid-template-columns:1fr; }
+      .row{ grid-template-columns:1fr; }
+      .kpis{ grid-template-columns:repeat(2,1fr); }
+    }
+    @media (max-width: 520px){
+      .kpis{ grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="header">
+    <div class="wrap header-row">
+      <div class="logo">
+        <img src="https://images.squarespace-cdn.com/content/v1/5480befae4b024050a4bf9e1/5ac679ee-138e-4d27-9cd8-56030e59354c/affff.jpg" alt="LK Centrix Solutions">
+      </div>
+      <div class="brand">
+        <span class="lk">LKCENTRIX</span>
+        <span class="solutions">SOLUTIONS</span>
+        <span class="product">MUNICIPAL DEBTOR INTELLIGENCE</span>
+      </div>
+    </div>
+  </div>
+
+  <main class="wrap">
+    <div class="hero fadeUp">
+      <h1>Debt Strategy — from enriched intelligence to next best action</h1>
+      <p>
+        This view quantifies <b>who can be recovered from</b>, <b>how to engage them</b>, and <b>where not to waste effort</b>,
+        based on identity resolution, ownership verification, contactability enrichment, and special case detection
+        (including <b style="color:#0a7fb0;">deceased estates</b> and <b style="color:#0a7fb0;">relief/indigent pathways</b>).
+      </p>
+
+      <div class="kpis">
+        <div class="kpi">
+          <div class="kpiLabel">Total municipal debtor accounts</div>
+          <div class="kpiVal" id="kpiTotal">4,609</div>
+          <div class="kpiSub">Accounts in current book</div>
+        </div>
+        <div class="kpi">
+          <div class="kpiLabel">Recovery-ready after enrichment</div>
+          <div class="kpiVal" id="kpiReady">3,146</div>
+          <div class="kpiSub">High-confidence identity + ownership</div>
+        </div>
+        <div class="kpi">
+          <div class="kpiLabel">Verified contactability</div>
+          <div class="kpiVal" id="kpiContact">3,284</div>
+          <div class="kpiSub">At least one usable channel</div>
+        </div>
+        <div class="kpi">
+          <div class="kpiLabel">Special cases detected</div>
+          <div class="kpiVal" id="kpiSpecial">812</div>
+          <div class="kpiSub">Deceased / relief / complex handling</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RECOVERY READINESS -->
+    <section class="grid">
+      <div class="card fadeUp">
+        <div class="cardHead">
+          <div>
+            <div class="cardTitle">Debtor Recovery Readiness Distribution</div>
+            <div class="cardNote">
+              Summary of operational pathways based on enriched identity, ownership linkage, contactability and special case flags.
+              Use this to size workload across digital self-cure, call-centre activity, case handling, and exclusions.
+            </div>
+          </div>
+          <div class="pill" title="Strategy categories">
+            <span class="dot" aria-hidden="true"></span>
+            <span id="readinessPill">Animated allocation</span>
+          </div>
+        </div>
+        <div class="cardBody">
+          <div class="chartWrap">
+            <canvas id="chartReadiness"></canvas>
+          </div>
+          <div class="chartLegend" id="legendReadiness"></div>
+        </div>
+      </div>
+
+      <div class="card fadeUp">
+        <div class="cardHead">
+          <div>
+            <div class="cardTitle">Recommended Next Actions (operational)</div>
+            <div class="cardNote">
+              Action mix derived from reachability and complexity signals. Percentages represent <b>accounts</b>, not Rand value.
+            </div>
+          </div>
+          <div class="pill" title="Execution focus">
+            <span class="dot" aria-hidden="true"></span>
+            <span>Collections playbook</span>
+          </div>
+        </div>
+        <div class="cardBody">
+          <table aria-label="Recommended Next Actions summary">
+            <thead>
+              <tr>
+                <th>Next action</th>
+                <th class="right">Accounts</th>
+                <th class="right">% of book</th>
+              </tr>
+            </thead>
+            <tbody id="tblActions"></tbody>
+          </table>
+          <div class="foot">
+            <span class="tag ok"><i></i> Low-intervention</span>
+            <span class="tag warn"><i></i> Assisted</span>
+            <span class="tag violet"><i></i> Case-based</span>
+            <span class="tag risk"><i></i> Exclusion / review</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CHANNELS / CONTACTABILITY / ESTATES / WRITE-OFF -->
+    <section class="row">
+      <div class="card fadeUp">
+        <div class="cardHead">
+          <div>
+            <div class="cardTitle">Verified Contact Channel Availability</div>
+            <div class="cardNote">
+              Contact channels added/verified through enrichment enable digital self-cure and reduce failed outreach attempts.
+            </div>
+          </div>
+          <div class="pill" title="Channel enablement">
+            <span class="dot" aria-hidden="true"></span>
+            <span>Reachability</span>
+          </div>
+        </div>
+        <div class="cardBody">
+          <div class="chartWrap tall">
+            <canvas id="chartChannels"></canvas>
+          </div>
+          <div class="muted" style="margin-top:8px; font-size:10.2px;">
+            Tip: prioritise <b>multi-channel</b> accounts first for rapid conversion and fewer rework loops.
+          </div>
+        </div>
+      </div>
+
+      <div class="card fadeUp">
+        <div class="cardHead">
+          <div>
+            <div class="cardTitle">Deceased & Estate Handling Pathways</div>
+            <div class="cardNote">
+              Accounts flagged as deceased require redirection toward estates, next-of-kin, or responsible occupants — improving compliance and recovery.
+            </div>
+          </div>
+          <div class="pill" title="Estate logic">
+            <span class="dot" aria-hidden="true"></span>
+            <span>Deceased / estates</span>
+          </div>
+        </div>
+        <div class="cardBody">
+          <div class="chartWrap tall">
+            <canvas id="chartEstate"></canvas>
+          </div>
+          <div class="muted" style="margin-top:8px; font-size:10.2px;">
+            Focus: reduce unlawful contact and shift effort to <b>recoverable parties</b>.
+          </div>
+        </div>
+      </div>
+
+      <div class="card fadeUp">
+        <div class="cardHead">
+          <div>
+            <div class="cardTitle">Strategic Exclusion & Write-off Review</div>
+            <div class="cardNote">
+              Not all accounts are currently recoverable. Quantifying exclusions improves operational efficiency and reduces wasted activity.
+            </div>
+          </div>
+          <div class="pill" title="Efficiency">
+            <span class="dot" aria-hidden="true"></span>
+            <span>Write-off logic</span>
+          </div>
+        </div>
+        <div class="cardBody">
+          <table aria-label="Strategic exclusion indicators">
+            <thead>
+              <tr>
+                <th>Indicator (municipal-safe)</th>
+                <th class="right">Accounts</th>
+                <th class="right">% of book</th>
+              </tr>
+            </thead>
+            <tbody id="tblExcl"></tbody>
+          </table>
+          <div class="muted" style="margin-top:10px; font-size:10.2px;">
+            Suggested process: <b>Hold → Verify → Correct → Re-strategise</b>. Where verification fails, move to <b>write-off review</b> with governance.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PLAYBOOK -->
+    <section class="card fadeUp" style="margin-bottom:18px;">
+      <div class="cardHead">
+        <div>
+          <div class="cardTitle">Collections Playbook — how the stats translate to action</div>
+          <div class="cardNote">
+            The strategy engine applies objective rules to determine the most appropriate pathway per account.
+            This keeps outreach consistent, auditable and operationally efficient.
+          </div>
+        </div>
+        <div class="pill" title="Rule mapping">
+          <span class="dot" aria-hidden="true"></span>
+          <span>Next-best-action mapping</span>
+        </div>
+      </div>
+      <div class="cardBody">
+        <table aria-label="Stat to action mapping">
+          <thead>
+            <tr>
+              <th>Signal (stat derived from enrichment)</th>
+              <th>What it means</th>
+              <th>Recommended pathway</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="tag ok"><i></i> Verified contact + confirmed identity</span></td>
+              <td class="muted">Low-friction engagement is possible; minimal operational cost.</td>
+              <td><b>Self-cure:</b> SMS / WhatsApp nudges → settlement prompt → payment arrangement link.</td>
+            </tr>
+            <tr>
+              <td><span class="tag warn"><i></i> Contactable but non-responsive</span></td>
+              <td class="muted">Digital messages alone are insufficient; requires human follow-up.</td>
+              <td><b>Assisted:</b> call-centre outreach → structured payment plan → follow-up cadence.</td>
+            </tr>
+            <tr>
+              <td><span class="tag violet"><i></i> Deceased + recoverable party</span></td>
+              <td class="muted">Do not engage the deceased; redirect to estate/occupant/next-of-kin.</td>
+              <td><b>Estate / case-based:</b> next-of-kin contact → executor/estate workflow → documented case notes.</td>
+            </tr>
+            <tr>
+              <td><span class="tag warn"><i></i> Distress / relief indicators</span></td>
+              <td class="muted">Balance recovery with social protection policy.</td>
+              <td><b>Relief / indigent assessment:</b> verify eligibility → apply relief policy → maintain service continuity.</td>
+            </tr>
+            <tr>
+              <td><span class="tag risk"><i></i> No ownership OR no contactability</span></td>
+              <td class="muted">Low probability of success without upstream correction.</td>
+              <td><b>Hold / review:</b> verify ownership → correct billing alignment → where unresolved, submit for write-off review.</td>
+            </tr>
+            <tr>
+              <td><span class="tag warn"><i></i> High arrears + confirmed ownership</span></td>
+              <td class="muted">Material exposure; prioritised case handling required.</td>
+              <td><b>Priority handling:</b> assisted engagement → targeted home visit → legal/admin escalation where appropriate.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="foot">
+          Notes: This demo uses realistic, illustrative values. In production, all counts and percentages update directly from the municipality’s latest book.
+        </div>
+      </div>
+    </section>
+
+    <div class="foot">
+      © LK Centrix Solutions — Municipal Debtor Intelligence | Debt Strategy
+    </div>
+  </main>
+
+  <script>
+    // ---------------------------
+    // DEMO DATA (meaningful, realistic)
+    // ---------------------------
+    const TOTAL = 4609;
+
+    // Recovery readiness distribution (accounts)
+    const readiness = [
+      { label: "Low-Intervention Recovery Ready", value: 1458 },
+      { label: "Assisted Engagement Required",     value: 1120 },
+      { label: "Estate / Case-Based Handling",     value: 512  },
+      { label: "Relief / Indigent Assessment",     value: 396  },
+      { label: "Recovery Not Currently Viable",    value: 1123 }
+    ];
+
+    // Recommended next actions (accounts)
+    const actions = [
+      { label: "Digital self-cure (SMS / WhatsApp)", value: 1458, pill: "ok" },
+      { label: "Call-centre engagement",             value: 1120, pill: "warn" },
+      { label: "Field / home visit (targeted)",      value: 214,  pill: "warn" },
+      { label: "Estate engagement (next-of-kin / occupant)", value: 298, pill: "violet" },
+      { label: "Relief / indigent assessment",       value: 396,  pill: "violet" },
+      { label: "Hold / verify / write-off review",   value: 1123, pill: "risk" }
+    ];
+
+    // OPTIONAL LABEL CLEANUP:
+    // Use short axis labels (readable) but keep full meaning in tooltips.
+    const channels = [
+      { label: "Multi-channel", value: 1542, full: "Multi-channel reachable" },
+      { label: "WhatsApp",      value: 604,  full: "WhatsApp enabled" },
+      { label: "SMS only",      value: 508,  full: "SMS only" },
+      { label: "Telephone",     value: 630,  full: "Telephone only" },
+      { label: "No valid contact", value: 1325, full: "Limited / no valid contact" }
+    ];
+
+    const estate = [
+      { label: "Deceased",          value: 312, full: "Confirmed deceased accounts" },
+      { label: "Next-of-kin",       value: 226, full: "Next-of-kin identified" },
+      { label: "Occupant",          value: 168, full: "Occupant / responsible party identified" },
+      { label: "Estate-ready",      value: 298, full: "Estate-recoverable (ready)" },
+      { label: "No party",          value: 94,  full: "No recoverable party identified" }
+    ];
+
+    // Exclusion / write-off indicators (accounts)
+    const exclusions = [
+      { label: "No ownership linkage (verification required)", value: 468 },
+      { label: "No valid contactability (data correction required)", value: 529 },
+      { label: "Long-term inactive (review required)", value: 356 },
+      { label: "Duplicate / invalid accounts (cleanup)", value: 214 }
+    ];
+
+    // KPI headline values (consistent)
+    const RECOVERY_READY = 3146;
+    const VERIFIED_CONTACT = 3284;
+    const SPECIAL_CASES = 812;
+
+    // ---------------------------
+    // Helpers
+    // ---------------------------
+    const fmt = (n) => n.toLocaleString("en-ZA");
+    const pct = (n) => (100 * n / TOTAL);
+
+    function setKpis(){
+      document.getElementById("kpiTotal").textContent = fmt(TOTAL);
+      document.getElementById("kpiReady").textContent = fmt(RECOVERY_READY);
+      document.getElementById("kpiContact").textContent = fmt(VERIFIED_CONTACT);
+      document.getElementById("kpiSpecial").textContent = fmt(SPECIAL_CASES);
+    }
+
+    function fillTableActions(){
+      const tb = document.getElementById("tblActions");
+      tb.innerHTML = "";
+      actions.forEach(r => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><span class="tag ${r.pill}"><i></i>${r.label}</span></td>
+          <td class="right"><b>${fmt(r.value)}</b></td>
+          <td class="right">${pct(r.value).toFixed(1)}%</td>
+        `;
+        tb.appendChild(tr);
+      });
+    }
+
+    function fillTableExclusions(){
+      const tb = document.getElementById("tblExcl");
+      tb.innerHTML = "";
+      exclusions.forEach(r => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${r.label}</td>
+          <td class="right"><b>${fmt(r.value)}</b></td>
+          <td class="right">${pct(r.value).toFixed(1)}%</td>
+        `;
+        tb.appendChild(tr);
+      });
+    }
+
+    function buildLegend(elId, items, colors){
+      const el = document.getElementById(elId);
+      el.innerHTML = "";
+      items.forEach((it, i) => {
+        const d = document.createElement("div");
+        d.className = "legItem";
+        d.innerHTML = `<span class="swatch" style="background:${colors[i]};"></span>
+                       <span>${it.label}: <b style="color:var(--ink)">${pct(it.value).toFixed(1)}%</b>
+                       <span class="muted">(${fmt(it.value)})</span></span>`;
+        el.appendChild(d);
+      });
+    }
+
+    // ---------------------------
+    // Doughnut percentage labels plugin (no extra libs)
+    // ---------------------------
+    const DoughnutPercentLabels = {
+      id: "doughnutPercentLabels",
+      afterDatasetsDraw(chart, args, pluginOptions){
+        const { ctx } = chart;
+        const datasetIndex = pluginOptions?.datasetIndex ?? 0;
+        const minPercent = pluginOptions?.minPercent ?? 4; // hide tiny slices
+        const meta = chart.getDatasetMeta(datasetIndex);
+        const data = chart.data.datasets[datasetIndex].data || [];
+        const total = data.reduce((a,b)=>a + (Number(b)||0), 0);
+
+        if (!meta || !meta.data || !total) return;
+
+        ctx.save();
+        ctx.font = "700 10px Open Sans, Arial, sans-serif";
+        ctx.fillStyle = pluginOptions?.color || "#0f172a";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+
+        meta.data.forEach((arc, i) => {
+          const v = Number(data[i]) || 0;
+          const p = (v / total) * 100;
+          if (p < minPercent) return;
+
+          const angle = (arc.startAngle + arc.endAngle) / 2;
+          const r = (arc.outerRadius + arc.innerRadius) / 2;
+          const x = arc.x + Math.cos(angle) * r;
+          const y = arc.y + Math.sin(angle) * r;
+
+          // subtle white stroke for readability
+        ctx.fillText(p.toFixed(1) + "%", x, y);
+        });
+
+        ctx.restore();
+      }
+    };
+
+    // ---------------------------
+    // Charts
+    // ---------------------------
+    const CSS = getComputedStyle(document.documentElement);
+    const COLORS = {
+      blue:   CSS.getPropertyValue('--blue').trim(),
+      teal:   CSS.getPropertyValue('--teal').trim(),
+      ok:     CSS.getPropertyValue('--ok').trim(),
+      warn:   CSS.getPropertyValue('--warn').trim(),
+      risk:   CSS.getPropertyValue('--risk').trim(),
+      violet: CSS.getPropertyValue('--violet').trim(),
+      slate:  CSS.getPropertyValue('--slate').trim()
+    };
+
+    const readinessColors = [COLORS.ok, COLORS.warn, COLORS.violet, COLORS.teal, COLORS.risk];
+
+    function makeReadiness(){
+      const ctx = document.getElementById("chartReadiness");
+      const labels = readiness.map(d => d.label);
+      const data = readiness.map(d => d.value);
+
+      const chart = new Chart(ctx, {
+        type: "doughnut",
+        data: {
+          labels,
+          datasets: [{
+            data,
+            backgroundColor: readinessColors,
+            borderColor: "#ffffff",
+            borderWidth: 2,
+            hoverOffset: 8
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: "62%",
+          animation: { duration: 1200, easing: "easeOutQuart" },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: (c) => {
+                  const v = c.raw || 0;
+                  return ` ${c.label}: ${fmt(v)} (${(100*v/data.reduce((a,b)=>a+b,0)).toFixed(1)}%)`;
+                }
+              }
+            },
+            // enable our percent labels on the doughnut
+            doughnutPercentLabels: {
+              datasetIndex: 0,
+              minPercent: 4,      // show labels only for slices >= 4%
+              color: "#0f172a"
+            }
+          }
+        },
+        plugins: [DoughnutPercentLabels]
+      });
+
+      buildLegend("legendReadiness", readiness, readinessColors);
+
+      // Animated pill copy
+      const pill = document.getElementById("readinessPill");
+      const phrases = [
+        "Sizing operational workload",
+        "Allocating channels & teams",
+        "Highlighting special cases",
+        "Reducing wasted effort",
+        "Improving recovery ROI"
+      ];
+      let i = 0;
+      setInterval(() => {
+        i = (i + 1) % phrases.length;
+        pill.textContent = phrases[i];
+      }, 1600);
+
+      return chart;
+    }
+
+    function makeChannels(){
+      const ctx = document.getElementById("chartChannels");
+      const labels = channels.map(d => d.label);
+      const data = channels.map(d => d.value);
+
+      return new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels,
+          datasets: [{
+            label: "Accounts",
+            data,
+            backgroundColor: [COLORS.blue, COLORS.teal, COLORS.blue, COLORS.slate, "#cbd5e1"],
+            borderRadius: 10
+          }]
+        },
+        options: {
+          responsive:true,
+          maintainAspectRatio:false,
+          layout: { padding: { bottom: 10 } },
+          animation:{ duration: 1100, easing:"easeOutQuart" },
+          scales: {
+            x: {
+              ticks: {
+                color: "#334155",
+                autoSkip: false,
+                maxRotation: 0,
+                minRotation: 0,
+                padding: 6,
+		 font: {
+      		size: 8,          
+      weight: "400"}	
+              },
+              grid: { display:false }
+            },
+            y: {
+              beginAtZero:true,
+              ticks: { color:"#334155", callback: (v) => fmt(v) },
+              grid: { color: "rgba(231,237,243,0.9)" }
+            }
+          },
+          plugins: {
+            legend: { display:false },
+            tooltip: {
+              callbacks: {
+                title: (items) => {
+                  const idx = items?.[0]?.dataIndex ?? 0;
+                  return channels[idx]?.full || channels[idx]?.label || "";
+                },
+                label: (c) => {
+                  const v = c.raw || 0;
+                  return ` ${fmt(v)} (${pct(v).toFixed(1)}%)`;
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+
+    function makeEstate(){
+      const ctx = document.getElementById("chartEstate");
+      const labels = estate.map(d => d.label);
+      const data = estate.map(d => d.value);
+
+      return new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels,
+          datasets: [{
+            label: "Accounts",
+            data,
+            backgroundColor: [COLORS.risk, COLORS.violet, COLORS.teal, COLORS.ok, "#cbd5e1"],
+            borderRadius: 10
+          }]
+        },
+        options: {
+          responsive:true,
+          maintainAspectRatio:false,
+          layout: { padding: { bottom: 10 } },
+          animation:{ duration: 1100, easing:"easeOutQuart" },
+          scales: {
+            x: {
+              ticks: {
+                color:"#334155",
+                autoSkip:false,
+                maxRotation: 0,
+                minRotation: 0,
+                padding: 6,
+		font: {
+      		size: 8,          
+      		weight: "400"}	
+              },
+              grid: { display:false }
+            },
+            y: {
+              beginAtZero:true,
+              ticks: { color:"#334155", callback: (v) => fmt(v) },
+              grid: { color: "rgba(231,237,243,0.9)" }
+            }
+          },
+          plugins: {
+            legend: { display:false },
+            tooltip: {
+              callbacks: {
+                title: (items) => {
+                  const idx = items?.[0]?.dataIndex ?? 0;
+                  return estate[idx]?.full || estate[idx]?.label || "";
+                },
+                label: (c) => {
+                  const v = c.raw || 0;
+                  return ` ${fmt(v)} (${pct(v).toFixed(1)}%)`;
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // Entrance animation
+    function revealOnLoad(){
+      const els = Array.from(document.querySelectorAll(".fadeUp"));
+      els.forEach((el, idx) => setTimeout(() => el.classList.add("show"), 90 + idx * 120));
+    }
+
+    // Init
+    setKpis();
+    fillTableActions();
+    fillTableExclusions();
+    revealOnLoad();
+
+    makeReadiness();
+    makeChannels();
+    makeEstate();
+  </script>
+</body>
+</html>
+
+</template>
+
+<template id="tpl-ir1">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Individual Report</title>
+
+  <!-- Open Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --blue:#0097d8;
+      --teal:#3ecfff;
+      --ink:#0f172a;
+      --muted:#5d6773;
+      --line:#e7edf3;
+      --shadow: 0 10px 28px rgba(16,24,40,0.08);
+      --radius: 16px;
+      --base: 10.5px;
+      --heading:#0b2d5c;
+
+      --good:#0ea5e9;
+      --warn:#f59e0b;
+      --bad:#ef4444;
+      --chip:#f3f7fb;
+    }
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family:"Open Sans", Arial, sans-serif;
+      font-size:var(--base);
+      color:var(--ink);
+      background:#fff;
+    }
+    .wrap{ max-width:1120px; margin:0 auto; padding: 16px 18px 26px; }
+
+    /* HERO */
+    .hero{
+      margin: 0 0 12px;
+      border-radius: var(--radius);
+      padding: 16px 16px 14px;
+      background:
+        radial-gradient(900px 260px at 15% 0%, rgba(0,151,216,0.22), transparent 62%),
+        radial-gradient(700px 240px at 85% 10%, rgba(62,207,255,0.18), transparent 60%),
+        linear-gradient(180deg,#fff,#fbfdff);
+      border:1px solid var(--line);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+    .hero h1{ margin:0 0 6px 0; font-size:16px; line-height:1.25; color:var(--heading); }
+    .hero p{ margin:0; font-size:11.2px; color:var(--muted); }
+
+    .heroRow{
+      display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end;
+      margin-top:10px;
+    }
+    .search{
+      flex: 1 1 360px;
+      display:flex; gap:8px; align-items:center;
+      padding:9px 10px;
+      border:1px solid var(--line);
+      border-radius: 999px;
+      background:#fff;
+      box-shadow: 0 10px 22px rgba(16,24,40,0.05);
+    }
+    .search input{
+      border:0; outline:0; width:100%;
+      font-size:11px;
+      background:transparent;
+      color:var(--ink);
+    }
+    .chip{
+      display:inline-flex; align-items:center; gap:6px;
+      padding:7px 10px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:#fff;
+      box-shadow: 0 10px 22px rgba(16,24,40,0.05);
+      font-size:10.5px;
+      color: var(--heading);
+      user-select: none;
+      white-space: nowrap;
+    }
+    .dot{
+      width:8px; height:8px; border-radius:999px;
+      background: var(--blue);
+      box-shadow: 0 0 0 4px rgba(0,151,216,0.12);
+      flex:0 0 auto;
+    }
+    .btn{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 10px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:#fff;
+      box-shadow: 0 10px 22px rgba(16,24,40,0.05);
+      font-size:10.5px;
+      color:var(--heading);
+      cursor:pointer;
+    }
+    .btn:hover{ transform: translateY(-1px); transition: transform .18s ease; }
+    .btn:active{ transform: translateY(0); }
+
+    /* SUMMARY TILES */
+    .tiles{
+      display:grid;
+      grid-template-columns:repeat(6,1fr);
+      gap:10px;
+      margin: 12px 0 14px;
+    }
+    .tile{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius: 16px;
+      padding:12px;
+      box-shadow: 0 10px 22px rgba(16,24,40,0.05);
+      transform: translateY(6px);
+      opacity: 0;
+      animation: inUp .55s ease forwards;
+      min-width:0;
+    }
+    .tile:nth-child(2){ animation-delay:.04s; }
+    .tile:nth-child(3){ animation-delay:.08s; }
+    .tile:nth-child(4){ animation-delay:.12s; }
+    .tile:nth-child(5){ animation-delay:.16s; }
+    .tile:nth-child(6){ animation-delay:.20s; }
+
+    .tileTop{ height:3px; width:28px; background:var(--blue); border-radius:99px; margin-bottom:8px; }
+    .tileTitle{ font-weight:700; font-size:11.2px; margin-bottom:3px; color:var(--heading); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .tileVal{ font-size:12.2px; font-weight:700; margin-bottom:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .tileDesc{ color:var(--muted); font-size:10.2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+    @keyframes inUp{ to{ transform: translateY(0); opacity:1; } }
+
+    /* SECTION CARDS */
+    .sections{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:10px;
+      padding-bottom: 10px;
+    }
+    .card{
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      background:#fff;
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      transform: translateY(10px);
+      opacity: 0;
+      animation: inCard .55s ease forwards;
+    }
+    @keyframes inCard{ to{ transform: translateY(0); opacity:1; } }
+
+    .cardHdr{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding:12px 12px;
+      cursor:pointer;
+      background:
+        radial-gradient(600px 90px at 10% 0%, rgba(0,151,216,0.18), transparent 62%),
+        linear-gradient(180deg,#fff,#fbfdff);
+      border-bottom:1px solid var(--line);
+    }
+    .cardHdrLeft{ display:flex; align-items:center; gap:10px; min-width:0; }
+    .badge{
+      display:inline-flex; align-items:center; justify-content:center;
+      width:28px; height:28px; border-radius: 10px;
+      background: rgba(0,151,216,0.12);
+      border:1px solid rgba(0,151,216,0.18);
+      color: var(--blue);
+      font-weight:700;
+      flex:0 0 auto;
+    }
+    .hdrTxt{ min-width:0; }
+    .kicker{ font-size:10px; color: var(--muted); margin-bottom:2px; }
+    .title{
+      font-size:11.6px;
+      font-weight:700;
+      color: var(--heading);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .meta{ display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; align-items:center; }
+    .pill{
+      display:inline-flex; align-items:center; gap:6px;
+      padding:6px 9px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:#fff;
+      font-size:10.2px;
+      color:var(--muted);
+      white-space:nowrap;
+    }
+    .pill .miniDot{
+      width:7px; height:7px; border-radius:999px;
+      background: #cbd5e1;
+      box-shadow: 0 0 0 3px rgba(203,213,225,0.22);
+    }
+    .pill.good .miniDot{ background: var(--good); box-shadow: 0 0 0 3px rgba(14,165,233,0.18); }
+    .pill.warn .miniDot{ background: var(--warn); box-shadow: 0 0 0 3px rgba(245,158,11,0.18); }
+    .pill.bad  .miniDot{ background: var(--bad);  box-shadow: 0 0 0 3px rgba(239,68,68,0.18); }
+
+    .chev{
+      width: 26px; height: 26px;
+      border-radius: 999px;
+      border:1px solid var(--line);
+      display:grid; place-items:center;
+      background:#fff;
+      color: var(--heading);
+      transition: transform .2s ease;
+      flex:0 0 auto;
+    }
+    .open .chev{ transform: rotate(180deg); }
+
+    .cardBody{ padding: 0 12px 12px; display:none; }
+    .open .cardBody{ display:block; }
+
+    .tableWrap{
+      border:1px solid var(--line);
+      border-radius: 14px;
+      overflow:hidden;
+      margin-top: 10px;
+    }
+    table{ width:100%; border-collapse:collapse; background:#fff; }
+    thead th{
+      text-align:left;
+      padding:10px 10px;
+      font-size:10.6px;
+      color: var(--heading);
+      background: #fbfdff;
+      border-bottom:1px solid var(--line);
+    }
+    tbody td{
+      padding:8px 10px;
+      border-bottom:1px solid #f0f4f8;
+      vertical-align:top;
+      font-size:10.6px;
+    }
+    tbody tr:last-child td{ border-bottom:0; }
+    .field{ width:38%; color: var(--heading); font-weight: 600; word-break: break-word; }
+    .value{ width:62%; color: var(--ink); word-break: break-word; }
+
+    .null{
+      color:#94a3b8;
+      font-weight:700;
+      text-transform:uppercase;
+      font-size:10px;
+      letter-spacing:.3px;
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+    }
+    .null:before{
+      content:"";
+      width:7px; height:7px;
+      border-radius:999px;
+      background:#cbd5e1;
+      box-shadow: 0 0 0 4px rgba(203,213,225,0.25);
+      display:inline-block;
+    }
+
+    .hl{
+      background: rgba(62,207,255,0.22);
+      border-radius: 6px;
+      padding: 0 2px;
+    }
+
+    @media (max-width: 1100px){ .tiles{ grid-template-columns:repeat(3,1fr); } }
+    @media (max-width: 760px){ .tiles{ grid-template-columns:repeat(2,1fr); } }
+    @media (max-width: 520px){
+      .tiles{ grid-template-columns:1fr; }
+      .meta{ justify-content:flex-start; }
+      .search{ flex: 1 1 100%; }
+      .btn{ width:100%; justify-content:center; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <h1>Individual Report</h1>
+      <p>A consolidated view of identity, property ownership, contactability, linkage and credit indicators for the debtor.</p>
+
+      <div class="heroRow">
+        <div class="search" role="search" aria-label="Search report">
+          <span class="dot" aria-hidden="true"></span>
+          <input id="q" type="text" placeholder="Search (e.g. bond, email, pietermaritzburg, score)..." />
+        </div>
+
+        <div class="chip" title="Total matching rows across all sections">
+          <span class="dot" aria-hidden="true"></span>
+          <span id="matchCount">0 matches</span>
+        </div>
+
+        <div class="chip" title="Total sections">
+          <span class="dot" aria-hidden="true"></span>
+          <span id="sectionCount">15 sections</span>
+        </div>
+
+        <button class="btn" id="expandAllBtn" type="button">Expand all</button>
+        <button class="btn" id="collapseAllBtn" type="button">Collapse all</button>
+        <button class="btn" id="clearBtn" type="button">Clear search</button>
+      </div>
+    </div>
+
+    <div class="tiles" id="tiles"></div>
+    <div class="sections" id="sections"></div>
+  </div>
+
+<script>
+  // ---------- Helpers ----------
+  const isNull = (v) => (v === null || v === undefined || String(v).trim().toUpperCase() === "NULL" || String(v).trim() === "");
+  const fmtNull = (v) => isNull(v) ? '<span class="null">NULL</span>' : escapeHtml(String(v));
+  function escapeHtml(str){
+    return str.replace(/[&<>"']/g, (m) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  }
+
+  // ---------- Data (15 sections) ----------
+  // We split LKC Contact Information into 3 sections: Addresses, Phones, Employment & Email
+  const report = [
+    { section:"DATA VALIDATION", rows:[
+      ["OWNER NAME","MR JOHN SMITH"],
+      ["OWNER ID NUMBER","7201015012089"],
+      ["ADDRESS LINE 1","22 CENTRAL STREET"],
+      ["ADDRESS LINE 2","HAYFIELDS"],
+      ["ADDRESS LINE 3","PIETERMARITZBURG"],
+      ["ADDRESS LINE 4","3201"],
+      ["RATES ACCOUNT NUMBER","0010012"],
+      ["ACCOUNT BALANCE","R18445,07"],
+      ["ARREAR AMOUNT","R8992.99"],
+      ["AGE OF ARREARS","60 DAYS"],
+      ["LAST PAYMENT AMOUNT","R1400.00"],
+      ["LAST PAYMENT DATE","30 JUNE 2025"],
+      ["IS INDIGENT","NO"],
+      ["CONTACT PERSON NAME","JOHN SMITH"],
+      ["CONTACT PERSON TELEPHONE NUMBER","0829009002"]
+    ]},
+    { section:"SEGMENTATION", rows:[
+      ["PARTY_TYPE SEGMENTATION","INDIVIDUAL"],
+      ["ID CHECK SEGMENTATION","INCORRECT ID SUPPLIED BY MUNICIPALITY"],
+      ["MATCH RULE","MATCHED ON NAME, SURNAME, DATE OF BIRTH AND ADDRESS"]
+    ]},
+    { section:"PROPERTY INFORMATION", rows:[
+      ["FOUND AT DEEDS OFFICE","YES"],
+      ["SURVEYOR GENERAL UNIQUE ID","N0FS06650000001029000"],
+      ["ERF","11"],
+      ["PORTION","21"],
+      ["SUBURB","HAYFIELDS"],
+      ["BUYER NAME","MR JOHN SMITH"],
+      ["BUYER ID NUMBER","7201015012089"],
+      ["EXTENT","963 M2"],
+      ["Y COORDINATE","41.0276347944"],
+      ["X COORDINATE","41.4693549111"],
+      ["PROPERTY ID","783965"],
+      ["TRANSFER ID","376031"],
+      ["PROPERTY TYPE","FULL TITLE - ERF - LAND PARCEL"],
+      ["PROPERTY NAME","FULL TITLE"],
+      ["AUTHORITY","PIETERMARITZBURG"],
+      ["MUNICIPALITY NAME","MSUNDUZI LOCAL MUNICIPALITY"],
+      ["LPI CODE","N0FS0199"],
+      ["REGISTRATION DIVISION","FS"],
+      ["EXTENSION","PELHAM"],
+      ["UNIT","22"],
+      ["PROPERTY YEAR","1990"],
+      ["PROPERTY NUMBER","11664"],
+      ["TITLE DEED NUMBER","T679/1990"],
+      ["TITLE DEED FEE","R7000.00"],
+      ["DATE PURCHASED","40420"],
+      ["DATE REGISTERED","40604"],
+      ["PURCHASE AMOUNT","R340000.00"],
+      ["PURCHASE REFERENCE","NULL"],
+      ["ADDITIONAL DESCRIPTION","NULL"],
+      ["IS CURRENT OWNER","YES"],
+      ["BOND NUMBER","VA829/2010"],
+      ["BOND HOLDER","STANDARD BANK OF SOUTH AFRICA"],
+      ["BOND AMOUNT","R340000.00"]
+    ]},
+    { section:"HOME AFFAIRS", rows:[
+      ["NAME","JOHN"],
+      ["SURNAME","SMITH"],
+      ["ID NUMBER","7201015012089"],
+      ["DECEASED STATUS","ALIVE"],
+      ["DECEASED DATE","NULL"],
+      ["MARITAL STATUS","MARRIED"],
+      ["MARRIAGE DATE","36555"],
+      ["DIVORCE DATE","NULL"]
+    ]},
+
+    // --- split contact info into 3 sections ---
+    { section:"LKC CONTACT INFORMATION — ADDRESSES", rows:[
+      ["RESIDENTIAL ADDRESS_1 LINE 1","22 CENTRAL STREET"],
+      ["RESIDENTIAL ADDRESS_1 LINE 2","NULL"],
+      ["RESIDENTIAL ADDRESS_1 LINE 3","HAYFIELDS"],
+      ["RESIDENTIAL ADDRESS_1 LINE 4","PIETERMARITZBURG"],
+      ["RESIDENTIAL ADDRESS_1 LINE 5","3201"],
+      ["RESIDENTIAL ADDRESS_1_DATE","2025/09/09"],
+
+      ["RESIDENTIAL ADDRESS_2 LINE 1","39 MANHATTAN ESTATE"],
+      ["RESIDENTIAL ADDRESS_2 LINE 2","20 TIN ROAD"],
+      ["RESIDENTIAL ADDRESS_2 LINE 3","PELHAM"],
+      ["RESIDENTIAL ADDRESS_2 LINE 4","PIETERMARITZBURG"],
+      ["RESIDENTIAL ADDRESS_2 LINE 5","3298"],
+      ["RESIDENTIAL ADDRESS_2_DATE","2009/09/01"],
+
+      ["RESIDENTIAL ADDRESS_3 LINE 1","25 NYOTI FLATS"],
+      ["RESIDENTIAL ADDRESS_3 LINE 2","199 SOUTH ROAD"],
+      ["RESIDENTIAL ADDRESS_3 LINE 3","HILLGROVE"],
+      ["RESIDENTIAL ADDRESS_3 LINE 4","DURBAN"],
+      ["RESIDENTIAL ADDRESS_3 LINE 5","4009"],
+      ["RESIDENTIAL ADDRESS_3_DATE","2002/10/17"],
+
+      ["POSTAL ADDRESS_1 LINE 1","PO BOX 17"],
+      ["POSTAL ADDRESS_1 LINE 2","NULL"],
+      ["POSTAL ADDRESS_1 LINE 3","PELHAM"],
+      ["POSTAL ADDRESS_1 LINE 4","PIETERMARITZBURG"],
+      ["POSTAL ADDRESS_1 LINE 5","3299"],
+      ["POSTAL ADDRESS_1_DATE","2025/09/09"],
+
+      ["POSTAL ADDRESS_2 LINE 1","NULL"],
+      ["POSTAL ADDRESS_2 LINE 2","NULL"],
+      ["POSTAL ADDRESS_2 LINE 3","NULL"],
+      ["POSTAL ADDRESS_2 LINE 4","NULL"],
+      ["POSTAL ADDRESS_2 LINE 5","NULL"],
+      ["POSTAL ADDRESS_2_DATE","NULL"],
+
+      ["POSTAL ADDRESS_3 LINE 1","NULL"],
+      ["POSTAL ADDRESS_3 LINE 2","NULL"],
+      ["POSTAL ADDRESS_3 LINE 3","NULL"],
+      ["POSTAL ADDRESS_3 LINE 4","NULL"],
+      ["POSTAL ADDRESS_3 LINE 5","NULL"],
+      ["POSTAL ADDRESS_3_DATE","NULL"]
+    ]},
+    { section:"LKC CONTACT INFORMATION — PHONE NUMBERS", rows:[
+      ["HOME TEL_1","0339876543"],
+      ["HOME TEL1_DATE","2025/09/09"],
+      ["HOME TEL_2","0339871243"],
+      ["HOME TEL2_DATE","2009/09/01"],
+      ["HOME TEL_3","0336548907"],
+      ["HOME TEL3_DATE","2002/10/17"],
+
+      ["WORK TEL_1","0337876543"],
+      ["WORK TEL1_DATE","2025/09/09"],
+      ["WORK TEL_2","0337876541"],
+      ["WORK TEL2_DATE","2002/10/17"],
+      ["WORK TEL_3","0334564567"],
+      ["WORK TEL3_DATE","2001/09/01"],
+
+      ["CELLULAR_1","0834009876"],
+      ["CELLULAR1_DATE","2025/09/09"],
+      ["CELLULAR_2","0832342345"],
+      ["CELLULAR2_DATE","2009/09/01"],
+      ["CELLULAR_3","0829009002"],
+      ["CELLULAR3_DATE","2002/10/17"]
+    ]},
+    { section:"LKC CONTACT INFORMATION — EMPLOYMENT & EMAIL", rows:[
+      ["EMPLOYMENT_1","JOES HARDWARE PIETERMATRITZBURG"],
+      ["EMPLOYMENT_1_DATE","2025/09/09"],
+      ["EMPLOYMENT_2","BLUE ENGINEERING"],
+      ["EMPLOYMENT_2_DATE","2009/09/01"],
+      ["EMPLOYMENT_3","GRAYS CLOTHING"],
+      ["EMPLOYMENT_3_DATE","2002/10/17"],
+      ["EMAILADDRESS","JOHNSMITH1972@GMAIL.COM"]
+    ]},
+
+    { section:"LKC LINKAGE INFORMATION", rows:[
+      ["SPOUSE ID NO","7501090909087"],
+      ["SPOUSE TITLE","MRS"],
+      ["SPOUSE SURNAME","SMITH"],
+      ["SPOUSE FIRST NAME","MARY"],
+      ["SPOUSE SECOND NAME","JANE"],
+      ["SPOUSE DATE OF DEATH","NULL"],
+      ["SPOUSE ADDRESS_LINE 1","22 CENTRAL STREET"],
+      ["SPOUSE ADDRESS_LINE 2","NULL"],
+      ["SPOUSE ADDRESS_LINE 3","HAYFIELDS"],
+      ["SPOUSE ADDRESS_LINE 4","PIETERMARITZBURG"],
+      ["SPOUSE ADDRESS_LINE 5","3201"],
+      ["SPOUSE HOME TEL","0339876543"],
+      ["SPOUSE WORK TEL","0336854309"],
+      ["SPOUSE CELLULAR","0837754211"],
+      ["SPOUSE EMPLOYER","ABSA BANK HAYFIELDS"]
+    ]},
+    { section:"LKC CREDIT INFORMATION", rows:[
+      ["IS CREDIT ACTIVE","YES"],
+      ["TOTAL CREDIT COMMITMENTS","R655887.90"],
+      ["TOTAL MONTHLY INSTALMENT","R11097.22"],
+      ["TOTAL CURRENT BALANCE","R655887.90"],
+      ["TOTAL BALANCE IN ARREARS","R0"],
+      ["NUMBER OF ASSET FINANCE ACCOUNTS","1"],
+      ["NUMBER OF CREDIT CARD ACCOUNTS","0"],
+      ["NUMBER OF DEBT RECOVERY ACCOUNTS","0"],
+      ["NUMBER OF FINANCIAL OTHER ACCOUNTS","0"],
+      ["NUMBER OF GARAGE ACCOUNTS","0"],
+      ["NUMBER OF INSURANCE ACCOUNTS","1"],
+      ["NUMBER OF LANDLINE ACCOUNTS","0"],
+      ["NUMBER OF MICROLOANS ACCOUNTS","0"],
+      ["NUMBER OF MORTGAGE ACCOUNTS","1"],
+      ["NUMBER OF PERSONAL LOANS ACCOUNTS","1"],
+      ["NUMBER OF RENTALS ASSET ACCOUNTS","0"],
+      ["NUMBER OF RETAIL APPAREL ACCOUNTS","1"],
+      ["NUMBER OF RETAIL FURNITURE ACCOUNTS","0"],
+      ["NUMBER OF RETAIL GENERAL ACCOUNTS","0"],
+      ["NUMBER OF REVOLVING NONSTORE ACCOUNTS","0"],
+      ["NUMBER OF SECURITY ACCOUNTS","0"],
+      ["NUMBER OF STUDENT LOANS ACCOUNTS","0"],
+      ["NUMBER OF TELECOMMS ACCOUNTS","1"],
+      ["NUMBER OF OTHER CREDIT ACCOUNTS","0"],
+      ["ASSET FINANCE PAYMENT PROFILE","GOOD PAYMENT PROFILE IN LAST 12 MONTHS"],
+      ["CREDIT CARD PAYMENT PROFILE","NULL"],
+      ["DEBT RECOVERY PAYMENT PROFILE","NULL"],
+      ["FINANCIAL OTHER PAYMENT PROFILE","NULL"],
+      ["GARAGE PAYMENT PROFILE","NULL"],
+      ["INSURANCE PAYMENT PROFILE","GOOD PAYMENT PROFILE IN LAST 12 MONTHS"],
+      ["LANDLINE/ADSL PAYMENT PROFILE","NULL"],
+      ["MICROLOANS PAYMENT PROFILE","NULL"],
+      ["MORTGAGE PAYMENT PROFILE","GOOD PAYMENT PROFILE IN LAST 12 MONTHS"],
+      ["PERSONAL LOANS PAYMENT PROFILE","GOOD PAYMENT PROFILE IN LAST 12 MONTHS"],
+      ["RENTALS ASSET PAYMENT PROFILE","NULL"],
+      ["RETAIL APPAREL PAYMENT PROFILE","GOOD PAYMENT PROFILE IN LAST 12 MONTHS"],
+      ["RETAIL FURNITURE PAYMENT PROFILE","NULL"],
+      ["RETAIL GENERAL PAYMENT PROFILE","NULL"],
+      ["REVOLVING NONSTORE PAYMENT PROFILE","NULL"],
+      ["SECURITY PAYMENT PROFILE","NULL"],
+      ["STUDENT LOANS PAYMENT PROFILE","NULL"],
+      ["TELECOMMS PAYMENT PROFILE","GOOD PAYMENT PROFILE IN LAST 12 MONTHS"],
+      ["OTHER CREDIT PAYMENT PROFILE","NULL"]
+    ]},
+    { section:"LKC ANALYTICS INFORMATION", rows:[
+      ["PREDICTED INCOME","R23900"],
+      ["CREDIT SCORE","780"],
+      ["AFFORDABILITY","R6500"],
+      ["DEBT RECOVERY SCORE","800"]
+    ]},
+    { section:"LKC NEGATIVE CREDIT INFORMATION", rows:[
+      ["DEBT REVIEW STATUS","NULL"],
+      ["DEBT REVIEW DATE","NULL"],
+      ["NUMBER OF JUDGEMENTS","0"],
+      ["LATEST JUDGEMENT","NULL"],
+      ["TOTAL JUDGEMENTS AMOUNT","NULL"],
+      ["ADMIN ORDER","0"],
+      ["ADMIN ORDER DATE","NULL"]
+    ]},
+    { section:"LKC ADDITIONAL PROPERTY INFORMATION", rows:[
+      ["ADDITIONAL PROPERTY 1 PROPERTY ID","179098"],
+      ["ADDITIONAL PROPERTY 1 TRANSFER ID","29645477"],
+      ["ADDITIONAL PROPERTY 1 PROPERTY TYPE","FARM"],
+      ["ADDITIONAL PROPERTY 1 PROPERTY NAME","PINETOWN"],
+      ["ADDITIONAL PROPERTY 1 AUTHORITY","NULL"],
+      ["ADDITIONAL PROPERTY 1 MUNICIPALITY NAME","DURBAN"],
+      ["ADDITIONAL PROPERTY 1 LPI CODE","N0GS0000"],
+      ["ADDITIONAL PROPERTY 1 REGISTRATION DIVISION","GS"],
+      ["ADDITIONAL PROPERTY 1 SUBURB","GS"],
+      ["ADDITIONAL PROPERTY 1 EXTENSION","GS"],
+      ["ADDITIONAL PROPERTY 1 ERF","1211"],
+      ["ADDITIONAL PROPERTY 1 PORTION","7"],
+      ["ADDITIONAL PROPERTY 1 UNIT","NULL"],
+      ["ADDITIONAL PROPERTY 1 PROPERT YYEAR","NULL"],
+      ["ADDITIONAL PROPERTY 1 PROPERTY NUMBER","1211"],
+      ["ADDITIONAL PROPERTY 1 Y","-28.7482940000"],
+      ["ADDITIONAL PROPERTY 1 X","29.4395703333"],
+      ["ADDITIONAL PROPERTY 1 SGID","N0GS00000000121100007"],
+      ["ADDITIONAL PROPERTY 1 TITLE DEED NUMBER","T12940/2023"],
+      ["ADDITIONAL PROPERTY 1 TITLE DEED FEE","0"],
+      ["ADDITIONAL PROPERTY 1 DATE PURCHASE","44833"],
+      ["ADDITIONAL PROPERTY 1 DATE REGISTER","45063"],
+      ["ADDITIONAL PROPERTY 1 PURCHASE AMOUNT","300000"],
+      ["ADDITIONAL PROPERTY 1 PURCHASE REFERENCE","NULL"],
+      ["ADDITIONAL PROPERTY 1 ADD DESCRIPTION","PTN 1"],
+      ["ADDITIONAL PROPERTY 1 EXTENT TRANSFER","11.59250000"],
+      ["ADDITIONAL PROPERTY 1 EXTENT PROPERTY","11.59250000"],
+      ["ADDITIONAL PROPERTY 1 IS CURRENT OWNER","YES"],
+      ["ADDITIONAL PROPERTY 1 BOND NUMBER","B18609/2016"],
+      ["ADDITIONAL PROPERTY 1 BOND HOLDER","ABSA BANK LTD"],
+      ["ADDITIONAL PROPERTY 1 BOND AMOUNT","8000000"],
+      ["ADDITIONAL PROPERTY 1 BUYER ID NUMBER","7201015012089"],
+
+      ["ADDITIONAL PROPERTY 2 PROPERTY ID","1235"],
+      ["ADDITIONAL PROPERTY 2 TRANSFER ID","-28.6276111553"],
+      ["ADDITIONAL PROPERTY 2 PROPERTY TYPE","29.4516398311"],
+      ["ADDITIONAL PROPERTY 2 PROPERTY NAME","N0GS00000000123500003"],
+      ["ADDITIONAL PROPERTY 2 AUTHORITY","T8338/1996"],
+      ["ADDITIONAL PROPERTY 2 MUNICIPALITY NAME","NULL"],
+      ["ADDITIONAL PROPERTY 2 LPI CODE","35097"],
+      ["ADDITIONAL PROPERTY 2 REGISTRATION DIVISION","35153"],
+      ["ADDITIONAL PROPERTY 2 SUBURB","550000"],
+      ["ADDITIONAL PROPERTY 2 EXTENSION","NULL"],
+      ["ADDITIONAL PROPERTY 2 ERF","PTN 2"],
+      ["ADDITIONAL PROPERTY 2 PORTION","231.97090000"],
+      ["ADDITIONAL PROPERTY 2 UNIT","231.97090000"],
+      ["ADDITIONAL PROPERTY 2 PROPERT YYEAR","1"],
+      ["ADDITIONAL PROPERTY 2 PROPERTY NUMBER","NULL"],
+      ["ADDITIONAL PROPERTY 2 Y","NULL"],
+      ["ADDITIONAL PROPERTY 2 X","NULL"],
+      ["ADDITIONAL PROPERTY 2 SGID","5903295006001"],
+      ["ADDITIONAL PROPERTY 2 TITLE DEED NUMBER","T12940/2023"],
+      ["ADDITIONAL PROPERTY 2 TITLE DEED FEE","0"],
+      ["ADDITIONAL PROPERTY 2 DATE PURCHASE","44833"],
+      ["ADDITIONAL PROPERTY 2 DATE REGISTER","45063"],
+      ["ADDITIONAL PROPERTY 2 PURCHASE AMOUNT","300000"],
+      ["ADDITIONAL PROPERTY 2 PURCHASE REFERENCE","NULL"],
+      ["ADDITIONAL PROPERTY 2 ADD DESCRIPTION","PTN 1"],
+      ["ADDITIONAL PROPERTY 2 EXTENT TRANSFER","11.59250000"],
+      ["ADDITIONAL PROPERTY 2 EXTENT PROPERTY","11.59250000"],
+      ["ADDITIONAL PROPERTY 2 IS CURRENT OWNER","YES"],
+      ["ADDITIONAL PROPERTY 2 BOND NUMBER","B609/2011"],
+      ["ADDITIONAL PROPERTY 2 BOND HOLDER","NEDBANK LTD"],
+      ["ADDITIONAL PROPERTY 2 BOND AMOUNT","200000"],
+      ["ADDITIONAL PROPERTY 2 BUYER ID NUMBER","7201015012089"],
+
+      ["ADDITIONAL PROPERTY 3 PROPERTY ID","NULL"],
+      ["ADDITIONAL PROPERTY 3 TRANSFER ID","NULL"],
+      ["ADDITIONAL PROPERTY 3 PROPERTY TYPE","NULL"],
+      ["ADDITIONAL PROPERTY 3 PROPERTY NAME","NULL"],
+      ["ADDITIONAL PROPERTY 3 AUTHORITY","NULL"],
+      ["ADDITIONAL PROPERTY 3 MUNICIPALITY NAME","NULL"],
+      ["ADDITIONAL PROPERTY 3 LPI CODE","NULL"],
+      ["ADDITIONAL PROPERTY 3 REGISTRATION DIVISION","NULL"],
+      ["ADDITIONAL PROPERTY 3 SUBURB","NULL"],
+      ["ADDITIONAL PROPERTY 3 EXTENSION","NULL"],
+      ["ADDITIONAL PROPERTY 3 ERF","NULL"],
+      ["ADDITIONAL PROPERTY 3 PORTION","NULL"],
+      ["ADDITIONAL PROPERTY 3 UNIT","NULL"],
+      ["ADDITIONAL PROPERTY 3 PROPERT YYEAR","NULL"],
+      ["ADDITIONAL PROPERTY 3 PROPERTY NUMBER","NULL"],
+      ["ADDITIONAL PROPERTY 3 Y","NULL"],
+      ["ADDITIONAL PROPERTY 3 X","NULL"],
+      ["ADDITIONAL PROPERTY 3 SGID","NULL"],
+      ["ADDITIONAL PROPERTY 3 TITLE DEED NUMBER","NULL"],
+      ["ADDITIONAL PROPERTY 3 TITLE DEED FEE","NULL"],
+      ["ADDITIONAL PROPERTY 3 DATE PURCHASE","NULL"],
+      ["ADDITIONAL PROPERTY 3 DATE REGISTER","NULL"],
+      ["ADDITIONAL PROPERTY 3 PURCHASE AMOUNT","NULL"],
+      ["ADDITIONAL PROPERTY 3 PURCHASE REFERENCE","NULL"],
+      ["ADDITIONAL PROPERTY 3 ADD DESCRIPTION","NULL"],
+      ["ADDITIONAL PROPERTY 3 EXTENT TRANSFER","NULL"],
+      ["ADDITIONAL PROPERTY 3 EXTENT PROPERTY","NULL"],
+      ["ADDITIONAL PROPERTY 3 IS CURRENT OWNER","NULL"],
+      ["ADDITIONAL PROPERTY 3 BOND NUMBER","NULL"],
+      ["ADDITIONAL PROPERTY 3 BOND HOLDER","NULL"],
+      ["ADDITIONAL PROPERTY 3 BOND AMOUNT","NULL"],
+      ["ADDITIONAL PROPERTY 3 BUYER ID NUMBER","NULL"]
+    ]},
+    { section:"LKC ADDITIONAL LINKAGE INFORMATION", rows:[
+      ["LINKED PERSON 1 LINKAGE TYPE","SPOUSE"],
+      ["LINKED PERSON 1 SURNAME","SMITH"],
+      ["LINKED PERSON 1 FIRSTNAME","MARY"],
+      ["LINKED PERSON 1 CELLULAR","0837754211"],
+      ["LINKED PERSON 2 LINKAGE TYPE","LIVING AT SAME ADDRESS"],
+      ["LINKED PERSON 2 SURNAME","EDGAR"],
+      ["LINKED PERSON 2 FIRSTNAME","DAVID"],
+      ["LINKED PERSON 2 CELLULAR","0724599087"],
+      ["LINKED PERSON 3 LINKAGE TYPE","LIVING AT SAME ADDRESS"],
+      ["LINKED PERSON 3 SURNAME","SMITH"],
+      ["LINKED PERSON 3 FIRSTNAME","BEN"],
+      ["LINKED PERSON 3 CELLULAR","0726786789"]
+    ]},
+    { section:"LKC BUSINESS INFORMATION", rows:[
+      ["BUSINESS NAME","JOES HARDWARE PIETERMATRITZBURG"],
+      ["BUSINESS REGISTRATION NUMBER","2007/000921/07"],
+      ["BUSINESS START DATE","2007/01/01"],
+      ["BUSINESS TAX NUMBER","5678876"],
+      ["BUSINESS SIC CODE","S-77780"],
+      ["BUSINESS DESCRIPTION","GENERAL SUPERMARKET AND HARDWARE SUPPLIES"],
+      ["BUSINESS STATUS CODE","IN BUSINESS"],
+      ["BUSINESS TYPE CODE","PRIVATE COMPANY"],
+      ["BUSINESS VAT NUMBER","4190282011"]
+    ]},
+    { section:"LKC BUSINESS ANALYTICS INFORMATION", rows:[
+      ["BUSINESS CREDIT SCORE","772"],
+      ["BUSINESS CREDIT SCORE DESCRIPTION","MINIMUM CREDIT RISK"]
+    ]}
+  ];
+
+  // ---------- Summary Tiles ----------
+  function buildTiles(){
+    const tiles = document.getElementById('tiles');
+    const get = (label) => {
+      for (const s of report){
+        for (const [k,v] of s.rows){
+          if (String(k).toUpperCase() === String(label).toUpperCase()) return v;
+        }
+      }
+      return "NULL";
+    };
+
+    const owner = get("OWNER NAME");
+    const idno = get("OWNER ID NUMBER");
+    const acct = get("RATES ACCOUNT NUMBER");
+    const arrears = get("ARREAR AMOUNT");
+    const age = get("AGE OF ARREARS");
+    const lastPay = get("LAST PAYMENT AMOUNT");
+    const lastPayDate = get("LAST PAYMENT DATE");
+    const deceased = get("DECEASED STATUS");
+    const muni = get("MUNICIPALITY NAME");
+    const bondHolder = get("BOND HOLDER");
+    const creditScore = get("CREDIT SCORE");
+    const drScore = get("DEBT RECOVERY SCORE");
+
+    const tileData = [
+      {t:"Owner", v: owner, d:`ID: ${idno}`},
+      {t:"Rates Account", v: acct, d:`Arrears Age: ${age}`},
+      {t:"Arrear Amount", v: arrears, d:`Last Pay: ${lastPay} • ${lastPayDate}`},
+      {t:"Life Status", v: deceased, d:`Indigent: ${get("IS INDIGENT")}`},
+      {t:"Municipality", v: muni, d:`Suburb: ${get("SUBURB")}`},
+      {t:"Credit & Recovery", v: `Score ${creditScore}`, d:`Recovery Score: ${drScore}`}
+    ];
+
+    tiles.innerHTML = tileData.map(x => `
+      <div class="tile">
+        <div class="tileTop"></div>
+        <div class="tileTitle">${escapeHtml(x.t)}</div>
+        <div class="tileVal">${escapeHtml(String(x.v))}</div>
+        <div class="tileDesc">${escapeHtml(String(x.d))}</div>
+      </div>
+    `).join('');
+  }
+
+  // ---------- Build Sections ----------
+  function sectionStats(rows){
+    const total = rows.length;
+    const nulls = rows.reduce((acc, r) => acc + (isNull(r[1]) ? 1 : 0), 0);
+    const ratio = total === 0 ? 0 : Math.round(((total - nulls) / total) * 100);
+    let cls = "good";
+    if (ratio < 70) cls = "warn";
+    if (ratio < 45) cls = "bad";
+    return { total, nulls, ratio, cls };
+  }
+
+  function buildSections(){
+    const host = document.getElementById('sections');
+    host.innerHTML = "";
+
+    report.forEach((sec, idx) => {
+      const st = sectionStats(sec.rows);
+      const card = document.createElement('div');
+      card.className = "card";
+      card.style.animationDelay = `${Math.min(idx*0.03, 0.42)}s`;
+
+      card.innerHTML = `
+        <div class="cardHdr" role="button" aria-expanded="false">
+          <div class="cardHdrLeft">
+            <div class="badge">${idx+1}</div>
+            <div class="hdrTxt">
+              <div class="kicker">${st.total} fields • ${st.nulls} null</div>
+              <div class="title">${escapeHtml(sec.section)}</div>
+            </div>
+          </div>
+
+          <div class="meta">
+            <div class="pill ${st.cls}" title="Completeness score">
+              <span class="miniDot"></span>
+              <span>${st.ratio}% complete</span>
+            </div>
+            <div class="chev">⌄</div>
+          </div>
+        </div>
+
+        <div class="cardBody">
+          <div class="tableWrap">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width:38%;">Heading</th>
+                  <th style="width:62%;">Information</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${sec.rows.map(([k,v]) => `
+                  <tr data-row="1">
+                    <td class="field">${escapeHtml(String(k))}</td>
+                    <td class="value">${fmtNull(v)}</td>
+                  </tr>
+                `).join("")}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+
+      const hdr = card.querySelector('.cardHdr');
+      hdr.addEventListener('click', () => toggleCard(card));
+      hdr.addEventListener('keydown', (e) => {
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggleCard(card); }
+      });
+      hdr.tabIndex = 0;
+
+      host.appendChild(card);
+    });
+
+    // Open first 2 sections by default for “summary feel”
+    const cards = [...document.querySelectorAll('.card')];
+    if (cards[0]) openCard(cards[0], true);
+    if (cards[1]) openCard(cards[1], true);
+  }
+
+  function openCard(card, noScroll){
+    card.classList.add('open');
+    const hdr = card.querySelector('.cardHdr');
+    if (hdr) hdr.setAttribute('aria-expanded', 'true');
+    if (!noScroll){
+      const y = card.getBoundingClientRect().top + window.scrollY - 90;
+      window.scrollTo({ top:y, behavior:'smooth' });
+    }
+  }
+  function closeCard(card){
+    card.classList.remove('open');
+    const hdr = card.querySelector('.cardHdr');
+    if (hdr) hdr.setAttribute('aria-expanded', 'false');
+  }
+  function toggleCard(card){
+    if (card.classList.contains('open')) closeCard(card);
+    else openCard(card);
+  }
+
+  // ---------- Search + Highlight ----------
+  const q = document.getElementById('q');
+  const matchCountEl = document.getElementById('matchCount');
+  const clearBtn = document.getElementById('clearBtn');
+  const expandAllBtn = document.getElementById('expandAllBtn');
+  const collapseAllBtn = document.getElementById('collapseAllBtn');
+
+  function clearHighlights(){
+    document.querySelectorAll('.hl').forEach(el => {
+      // unwrap highlight spans
+      const parent = el.parentNode;
+      if (!parent) return;
+      parent.replaceChild(document.createTextNode(el.textContent), el);
+      parent.normalize();
+    });
+  }
+
+  function highlightText(node, term){
+    if (!term) return 0;
+    const text = node.textContent;
+    const low = text.toLowerCase();
+    const t = term.toLowerCase();
+    const idx = low.indexOf(t);
+    if (idx === -1) return 0;
+
+    // replace with highlighted HTML safely
+    const before = escapeHtml(text.slice(0, idx));
+    const mid = escapeHtml(text.slice(idx, idx + term.length));
+    const after = escapeHtml(text.slice(idx + term.length));
+    node.innerHTML = `${before}<span class="hl">${mid}</span>${after}`;
+    return 1;
+  }
+
+  function applySearch(term){
+    clearHighlights();
+    let matches = 0;
+
+    const cards = [...document.querySelectorAll('.card')];
+    cards.forEach(card => closeCard(card));
+
+    if (!term){
+      matchCountEl.textContent = "0 matches";
+      // restore default open
+      if (cards[0]) openCard(cards[0], true);
+      if (cards[1]) openCard(cards[1], true);
+      return;
+    }
+
+    cards.forEach(card => {
+      let cardHit = 0;
+      const rows = card.querySelectorAll('tbody tr');
+      rows.forEach(r => {
+        const fieldTd = r.children[0];
+        const valueTd = r.children[1];
+        // highlight in both columns
+        cardHit += highlightText(fieldTd, term);
+        cardHit += highlightText(valueTd, term);
+      });
+
+      if (cardHit > 0){
+        matches += cardHit;
+        openCard(card, true);
+      }
+    });
+
+    matchCountEl.textContent = `${matches} match${matches===1 ? "" : "es"}`;
+  }
+
+  q.addEventListener('input', () => applySearch(q.value.trim()));
+  clearBtn.addEventListener('click', () => { q.value=""; applySearch(""); q.focus(); });
+
+  expandAllBtn.addEventListener('click', () => {
+    document.querySelectorAll('.card').forEach(c => openCard(c, true));
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  collapseAllBtn.addEventListener('click', () => {
+    document.querySelectorAll('.card').forEach(c => closeCard(c));
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  // ---------- Init ----------
+  buildTiles();
+  buildSections();
+</script>
+</body>
+</html>
+
+</template>
+
+<script>
+  function loadTemplateIntoFrame(tplId, frameId){
+    const tpl = document.getElementById(tplId);
+    const frame = document.getElementById(frameId);
+    if (!tpl || !frame) return;
+    frame.srcdoc = tpl.innerHTML.trim();
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    loadTemplateIntoFrame('tpl-map3',      'geoFrame');
+    loadTemplateIntoFrame('tpl-debtinsv8', 'insightsFrame');
+    loadTemplateIntoFrame('tpl-debtstrat2','strategyFrame');
+    loadTemplateIntoFrame('tpl-ir1',       'individualFrame');
+  });
+</script>
+</body>
+</html>

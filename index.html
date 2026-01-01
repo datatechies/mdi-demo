@@ -183,7 +183,15 @@
       .tiles{ grid-template-columns:1fr; }
       .progressPill{ width:100%; justify-content:center; }
     }
-  
+  /* Mobile height + smooth iframe scrolling */
+iframe{
+  width:100%;
+  border:0;
+  height:72dvh;
+  height:72vh; /* fallback */
+  -webkit-overflow-scrolling: touch;
+}
+
 </style>
 </head>
 
@@ -927,6 +935,47 @@ renderLegend();
 applyCategoryVisibility();
 refreshSearchIndex();
 </script>
+	<!-- ===== MOBILE SAFARI / ANDROID FIX (PASTE THIS WHOLE BLOCK) ===== -->
+<script>
+(function(){
+  const FRAMES = ["geoFrame","insightsFrame","strategyFrame","individualFrame"];
+
+  function kick(){
+    try{ window.dispatchEvent(new Event("resize")); }catch(e){}
+    FRAMES.forEach(id=>{
+      const f = document.getElementById(id);
+      if(!f) return;
+      const r = f.getBoundingClientRect();
+      if(r.width < 50 || r.height < 50) return;
+
+      const prev = f.style.visibility;
+      f.style.visibility = "hidden";
+      requestAnimationFrame(()=>{
+        f.style.visibility = prev || "visible";
+        setTimeout(()=>{
+          try{
+            f.contentWindow && f.contentWindow.dispatchEvent(new Event("resize"));
+          }catch(e){}
+        }, 200);
+      });
+    });
+  }
+
+  window.addEventListener("load", ()=>setTimeout(kick, 400));
+  window.addEventListener("orientationchange", ()=>setTimeout(kick, 400));
+  window.addEventListener("pageshow", ()=>setTimeout(kick, 400));
+
+  const obs = new MutationObserver(()=>kick());
+  obs.observe(document.body, {
+    subtree:true,
+    childList:true,
+    attributes:true,
+    attributeFilter:["class","style"]
+  });
+})();
+</script>
+<!-- ===== END MOBILE FIX ===== -->
+	
 </body>
 </html>
 
@@ -3754,4 +3803,5 @@ refreshSearchIndex();
 </script>
 </body>
 </html>
+
 

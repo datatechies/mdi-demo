@@ -1921,6 +1921,21 @@ refreshSearchIndex();
 <!DOCTYPE html>
 <html lang="en">
 <head>
+	<style>
+  /* === REMOVE DEBT STRATEGY EMBEDDED BRANDING === */
+
+  /* Hide first visible block (branding/hero/header) */
+  body > :first-child {
+    display: none !important;
+  }
+
+  /* Remove spacing that block created */
+  body {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+</style>
+
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Municipal Debtor Intelligence — Debt Strategy</title>
@@ -3739,3 +3754,4 @@ refreshSearchIndex();
 </script>
 </body>
 </html>
+

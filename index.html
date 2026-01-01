@@ -236,6 +236,14 @@ iframe{
 .brand span:first-child {
   display: none !important;
 }
+/* Remove duplicate branding text next to logo */
+.brand .lk,
+.brand .solutions,
+.brand .brand-name,
+.brand span:first-child,
+.brand span:nth-child(2) {
+  display: none !important;
+}
 
 </style>
 </head>
@@ -3858,6 +3866,7 @@ refreshSearchIndex();
 
 </body>
 </html>
+
 
 
 

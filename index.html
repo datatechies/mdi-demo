@@ -2,6 +2,7 @@
 
 
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -38,26 +39,46 @@
     .wrap{ max-width: 1100px; margin: 0 auto; padding: 0 18px; }
 
     /* Header */
-    .header{ border-bottom:1px solid #e5e7eb; background:#fff; position:sticky; top:0; z-index:2000; }
-    .header-row{ display:flex; align-items:center; gap:14px; padding:4px 0; }
-    .logo img{ height:120px; width:auto; display:block; }
-    .brand{
-  font-weight:700;
-  letter-spacing:.4px;
+  /* Header */
+.header{ border-bottom:1px solid #e5e7eb; background:#fff; position:sticky; top:0; z-index:2000; }
+
+.header-row{
   display:flex;
   align-items:center;
-  justify-content:center;
-  flex:1;
-  gap:6px;
-}
-	.brand .product{
-  line-height: 1.1;
-  position: static;
+  justify-content:flex-start;
+  gap:18px;
+  padding:0;
 }
 
-    .brand .lk{ color:#6b7280; }
-    .brand .solutions{ color:#0b2d5c; }
-    .brand .product{ color:#111827; }
+.logo{ display:flex; align-items:center; }
+.logo img{  height:130px;
+  width:auto;
+  display:block;
+  transform: translateY(-9px); /* adjust -2, -4, -6 as needed */}
+
+.brand{
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  flex:1;
+  margin:0;
+  padding:0;
+  letter-spacing:.8px;
+}
+
+.brand .lk,
+.brand .solutions{ display:none !important; }
+
+.brand .product{
+  margin:0;
+  padding:0;
+  line-height:1;
+  position:static;
+  font-weight:800;
+  font-size:13px;
+  color:#111827;
+  text-transform:uppercase;
+}
 
     .nav{ background:var(--blue); position:relative; z-index:1000; }
     .nav .wrap{ display:flex; gap:6px; flex-wrap:wrap; overflow-x:auto; }
@@ -256,6 +277,19 @@ iframe{
 .brand span:first-child,
 .brand span:nth-child(2) {
   display: none !important;
+}
+.contact-wrapper {
+  max-width: 720px;
+  line-height: 1.6;
+}
+
+.contact-block p,
+.contact-team p {
+  margin-bottom: 12px;
+}
+
+.contact-team strong {
+  font-weight: 600;
 }
 
 </style>
@@ -497,8 +531,43 @@ iframe{
   <div class="wrap" style="padding-top:16px;">
     <div class="hero">
       <h1>Contact Us</h1>
-      <p>info@lkcentrix.co.za</p>
-	<p>011-568 8322</p>
+      <div class="contact-wrapper">
+
+
+  <div class="contact-block">
+    <p><strong>Address:</strong><br>
+      Bedfordview Corporate Park,<br>
+      4 Skeen Boulevard,<br>
+      Bedfordview, 2001
+    </p>
+
+    <p><strong>Telephone:</strong><br>
+      011 568 8322
+    </p>
+
+    <p><strong>Email:</strong><br>
+      <a href="mailto:info@lkcentrix.co.za">info@lkcentrix.co.za</a>
+    </p>
+
+    <p><strong>Website:</strong><br>
+      <a href="https://www.lkcentrix.co.za" target="_blank">
+        www.lkcentrix.co.za
+      </a>
+    </p>
+  </div>
+
+  <hr style="margin:24px 0; opacity:0.3;">
+
+  <h3>Contact our Specialist Team now:</h3>
+
+  <div class="contact-team">
+    <p><strong>Lindy Mbatha</strong><br>078 498 7504</p>
+    <p><strong>Palesa Mokobori</strong><br>076 820 0593</p>
+    <p><strong>Akshar Rampath</strong><br>083 554 9197</p>
+  </div>
+
+</div>
+
     </div>
   </div>
 </main>
@@ -511,6 +580,19 @@ iframe{
       a.classList.toggle('active', a.getAttribute('data-page') === page);
     });
   }
+function hideAllPages(){
+  const overview    = document.getElementById('pageOverview');
+  const insights    = document.getElementById('pageInsights');
+  const strategy    = document.getElementById('pageStrategy');
+  const individual  = document.getElementById('pageIndividual');
+  const contact     = document.getElementById('pageContact');
+
+  if (overview) overview.style.display = 'none';
+  if (insights) insights.style.display = 'none';
+  if (strategy) strategy.style.display = 'none';
+  if (individual) individual.style.display = 'none';
+  if (contact) contact.style.display = 'none';
+}
 
     function showPage(page){
     const overview    = document.getElementById('pageOverview');
@@ -580,23 +662,35 @@ iframe{
     window.scrollTo({ top: 0, behavior: 'smooth' });
     return false;
   }
+function resetGeoScroll() {
+  // 1) Reset the main page scroll (the right-hand scrollbar you see)
+  window.scrollTo({ top: 0, left: 0, behavior: "auto" });
 
-  function showGeo(){
-    // Ensure overview is visible, insights hidden
-    showPage('overview');
+  // 2) Reset the Geo iframe scroll (inside the iframe)
+  const geoFrame = document.getElementById("geoFrame");
+  if (geoFrame && geoFrame.contentWindow) {
+    geoFrame.contentWindow.scrollTo(0, 0);
+  }
+}
+function showGeo(){
+  // Keep Overview visible (geoPanel is inside it)
+  showPage('overview');
 
-    const panel = document.getElementById('geoPanel');
-    if (panel){
-      panel.style.display = 'block';
-      const processCard = document.querySelector('.diagram-card');
-      if (processCard) processCard.style.display = 'none';
-      setActiveNav('geo');
-      // Scroll to panel for a smooth demo experience
-      const y = panel.getBoundingClientRect().top + window.scrollY - 90;
-      window.scrollTo({ top: y, behavior: 'smooth' });
+  const panel = document.getElementById('geoPanel');
+  const processCard = document.querySelector('.diagram-card');
+
+  if (panel) panel.style.display = 'block';
+  if (processCard) processCard.style.display = 'none';
+
+  setActiveNav('geo');
+
+  // optional: scroll to the map panel
+  if (panel){
+    const y = panel.getBoundingClientRect().top + window.scrollY - 90;
+    window.scrollTo({ top: y, behavior: 'smooth' });
   }
-    return false;
-  }
+  return false;
+}
 
   function hideGeo(){
         const panel = document.getElementById('geoPanel');
@@ -3871,6 +3965,8 @@ refreshSearchIndex();
     loadTemplateIntoFrame('tpl-debtstrat2','strategyFrame');
     loadTemplateIntoFrame('tpl-ir1',       'individualFrame');
   });
+	
+
 </script>
 	<div id="rotateNotice">
   <div class="box">
